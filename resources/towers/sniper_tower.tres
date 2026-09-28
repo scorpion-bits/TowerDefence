@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TowerData" format=3]
+
+[ext_resource type="Script" uid="uid://dy3o47m4o2h6b" path="res://scripts/resources/tower_data.gd" id="1_2hfd5"]
+
+[resource]
+script = ExtResource("1_2hfd5")
+tower_name = "Sniper"
+cost = 100
+attack_range = 300.0
+attack_damage = 15
+attack_cooldown = 2.5
+projectile_speed = 800.0
+color = Color(1, 0.5, 0, 1)

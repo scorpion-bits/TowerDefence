@@ -1,0 +1,125 @@
+[gd_scene format=3 uid="uid://c1uddkr2uilng"]
+
+[ext_resource type="Script" uid="uid://bvyrp5u36m5ci" path="res://scripts/UI/ui.gd" id="1_nt7q6"]
+[ext_resource type="Resource" uid="uid://byibr7ksnpfv3" path="res://resources/towers/basic_tower.tres" id="2_x4jx1"]
+[ext_resource type="Resource" path="res://resources/towers/sniper_tower.tres" id="3_gdt2y"]
+[ext_resource type="Resource" path="res://resources/towers/mg_tower.tres" id="4_wm3ai"]
+
+[node name="UI" type="CanvasLayer" unique_id=1310874063]
+script = ExtResource("1_nt7q6")
+basic_tower_data = ExtResource("2_x4jx1")
+sniper_tower_data = ExtResource("3_gdt2y")
+mg_tower_data = ExtResource("4_wm3ai")
+
+[node name="Status" type="VBoxContainer" parent="." unique_id=1012246914]
+offset_left = 41.0
+offset_top = 38.0
+offset_right = 128.0
+offset_bottom = 88.0
+
+[node name="LivesLabel" type="Label" parent="Status" unique_id=126373767]
+layout_mode = 2
+text = "Lives"
+
+[node name="GoldLabel" type="Label" parent="Status" unique_id=180945710]
+layout_mode = 2
+text = "Golds"
+
+[node name="Wave" type="HBoxContainer" parent="." unique_id=201756152]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -22.5
+offset_right = 22.5
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="WaveCount" type="Label" parent="Wave" unique_id=1348267714]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "wave:"
+
+[node name="Functions" type="HBoxContainer" parent="." unique_id=1703447748]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -230.0
+offset_top = -71.0
+offset_right = -31.0
+offset_bottom = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="SpeedCheckbox" type="CheckBox" parent="Functions" unique_id=1723817855]
+layout_mode = 2
+text = "2x"
+
+[node name="AutoStartCheckbox" type="CheckBox" parent="Functions" unique_id=377225996]
+layout_mode = 2
+text = "Auto-Play"
+
+[node name="StartWaveButton" type="Button" parent="Functions" unique_id=543646465]
+layout_mode = 2
+text = "Start Wave"
+
+[node name="SideBar" type="VBoxContainer" parent="." unique_id=1925529463]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -20.0
+offset_bottom = 20.0
+grow_horizontal = 0
+grow_vertical = 2
+size_flags_horizontal = 8
+
+[node name="BtnBasic" type="Button" parent="SideBar" unique_id=56323295]
+layout_mode = 2
+tooltip_text = "Torre que atira rápido e dá dano médio"
+text = "Torre Básica - $50"
+
+[node name="BtnSniper" type="Button" parent="SideBar" unique_id=1986773516]
+layout_mode = 2
+text = "Sniper - $100"
+
+[node name="BtnMG" type="Button" parent="SideBar" unique_id=546714246]
+layout_mode = 2
+text = "Metralhadora - $75"
+
+[node name="UpgradeBar" type="VBoxContainer" parent="." unique_id=291445887]
+visible = false
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -97.0
+offset_top = -68.0
+offset_bottom = 68.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="StatsLabel" type="Label" parent="UpgradeBar" unique_id=1215019884]
+layout_mode = 2
+
+[node name="BtnDamage" type="Button" parent="UpgradeBar" unique_id=2029043582]
+layout_mode = 2
+text = "Dano"
+
+[node name="BtnSpeed" type="Button" parent="UpgradeBar" unique_id=1948830785]
+layout_mode = 2
+text = "Vell-Ataque"
+
+[node name="BtnRange" type="Button" parent="UpgradeBar" unique_id=2137405753]
+layout_mode = 2
+text = "Range
+"
+
+[node name="BtnClose" type="Button" parent="UpgradeBar" unique_id=55782426]
+layout_mode = 2
+text = "Close
+"

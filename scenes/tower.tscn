@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://ts2vkd13kk0t"]
+
+[ext_resource type="Texture2D" uid="uid://vb4l6jpg3uvc" path="res://icon.svg" id="1_2x682"]
+[ext_resource type="Script" uid="uid://c5r3gdcbd5nid" path="res://scripts/Tower/tower.gd" id="1_ay4al"]
+[ext_resource type="Resource" uid="uid://byibr7ksnpfv3" path="res://resources/towers/basic_tower.tres" id="2_jfguu"]
+[ext_resource type="PackedScene" uid="uid://bj88lg0tnqwnl" path="res://scenes/projectile.tscn" id="3_85u2j"]
+[ext_resource type="Script" uid="uid://daww6xjqgosau" path="res://scripts/components/targeting_component.gd" id="3_ktxwe"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_htqey"]
+
+[node name="Tower" type="Node2D" unique_id=211894414]
+script = ExtResource("1_ay4al")
+data = ExtResource("2_jfguu")
+projectile_scene = ExtResource("3_85u2j")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1309172861]
+scale = Vector2(0.4, 0.4)
+texture = ExtResource("1_2x682")
+
+[node name="AttackTimer" type="Timer" parent="." unique_id=820316974]
+
+[node name="TargetingComponent" type="Area2D" parent="." unique_id=1288014685]
+script = ExtResource("3_ktxwe")
+metadata/_custom_type_script = "uid://daww6xjqgosau"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TargetingComponent" unique_id=203429605]
+shape = SubResource("CircleShape2D_htqey")
+
+[node name="TextureButton" type="TextureButton" parent="." unique_id=967242901]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -25.0
+offset_top = -25.520834
+offset_right = 25.0
+offset_bottom = 25.520834
+grow_horizontal = 2
+grow_vertical = 2
+
+[connection signal="pressed" from="TextureButton" to="." method="_on_texture_button_pressed"]

@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://bj88lg0tnqwnl"]
+
+[ext_resource type="Script" uid="uid://cr53pf0gr7gpb" path="res://scripts/Projectile/projectile.gd" id="1_c8fcr"]
+[ext_resource type="Texture2D" uid="uid://vb4l6jpg3uvc" path="res://icon.svg" id="2_q3m7n"]
+[ext_resource type="Script" uid="uid://dt1ekf3eeronc" path="res://scripts/components/hitbox_component.gd" id="3_softn"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_htqey"]
+radius = 11.0
+
+[node name="Projectile" type="Node2D" unique_id=1451355702]
+script = ExtResource("1_c8fcr")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=129109058]
+scale = Vector2(0.2, 0.2)
+texture = ExtResource("2_q3m7n")
+
+[node name="HitboxComponent" type="Area2D" parent="." unique_id=1895427968]
+script = ExtResource("3_softn")
+metadata/_custom_type_script = "uid://dt1ekf3eeronc"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent" unique_id=1630993181]
+shape = SubResource("CircleShape2D_htqey")

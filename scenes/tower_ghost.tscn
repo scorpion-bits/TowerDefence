@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://blypxrtw4ha0b"]
+
+[ext_resource type="Script" uid="uid://b4wesrdqnatu7" path="res://scripts/Tower/tower_ghost.gd" id="1_cb017"]
+[ext_resource type="Texture2D" uid="uid://vb4l6jpg3uvc" path="res://icon.svg" id="2_l7wh3"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_htqey"]
+radius = 21.213203
+
+[node name="TowerGhost" type="Node2D" unique_id=1218326281]
+script = ExtResource("1_cb017")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1631739084]
+scale = Vector2(0.45, 0.45)
+texture = ExtResource("2_l7wh3")
+
+[node name="CollisionArea" type="Area2D" parent="." unique_id=91849490]
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CollisionArea" unique_id=2041770611]
+shape = SubResource("CircleShape2D_htqey")
