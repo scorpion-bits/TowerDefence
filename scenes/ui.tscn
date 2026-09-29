@@ -178,27 +178,14 @@ visible = false
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -101.0
-offset_top = 130.0
-offset_right = -4.0
-offset_bottom = 293.0
+offset_left = -131.0
+offset_top = 183.0
+offset_right = -7.0
+offset_bottom = 276.0
 grow_horizontal = 0
 
 [node name="StatsLabel" type="Label" parent="UpgradeBar" unique_id=1215019884]
 layout_mode = 2
-
-[node name="BtnDamage" type="Button" parent="UpgradeBar" unique_id=2029043582]
-layout_mode = 2
-text = "Dano"
-
-[node name="BtnSpeed" type="Button" parent="UpgradeBar" unique_id=1948830785]
-layout_mode = 2
-text = "Vell-Ataque"
-
-[node name="BtnRange" type="Button" parent="UpgradeBar" unique_id=2137405753]
-layout_mode = 2
-text = "Range
-"
 
 [node name="BtnSell" type="Button" parent="UpgradeBar" unique_id=565903358]
 layout_mode = 2
@@ -243,3 +230,14 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Reiniciar"
+
+[node name="BtnSkillTree" type="Button" parent="."]
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -60.0
+offset_right = 170.0
+offset_bottom = -20.0
+grow_vertical = 0
+text = "Árvore de Habilidades"

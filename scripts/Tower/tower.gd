@@ -7,14 +7,7 @@ extends Node2D
 @onready var sprite: Sprite2D = $Sprite2D
 @onready var attack_timer: Timer = $AttackTimer
 
-var damage_level: int = 1
-var fire_rate_level: int = 1
-var range_level: int = 1
-var base_upgrade_cost: int = 25
 var show_range: bool = false
-var total_upgrades: int = 0
-var max_total_upgrades: int = 5
-
 var valid_path_points: PackedVector2Array = []
 
 func _ready() -> void:
@@ -30,9 +23,30 @@ func _ready() -> void:
 			
 	GameManager.tower_selected.connect(_on_global_tower_selected)
 	GameManager.tower_deselected.connect(func(): set_show_range(false))
+	GameManager.skill_unlocked.connect(_on_skill_unlocked)
 	
-	# Delay path point calculation slightly to ensure tower position is final
 	call_deferred("_find_valid_path_points")
+
+func _on_skill_unlocked(_skill_id: String) -> void:
+	# Update stats whenever a new skill is unlocked
+	_update_stats()
+
+func get_current_damage() -> int:
+	if not data: return 0
+	return int(data.attack_damage + GameManager.get_tower_bonus(data.tower_name, "damage"))
+
+func get_current_range() -> float:
+	if not data: return 0.0
+	return data.attack_range + GameManager.get_tower_bonus(data.tower_name, "range")
+
+func get_current_cooldown() -> float:
+	if not data: return 0.1
+	var cd = data.attack_cooldown - GameManager.get_tower_bonus(data.tower_name, "fire_rate")
+	return max(0.1, cd)
+
+func get_current_effect_value() -> float:
+	if not data: return 0.0
+	return data.effect_value + GameManager.get_tower_bonus(data.tower_name, "effect_value")
 
 func _find_valid_path_points() -> void:
 	valid_path_points.clear()
@@ -44,7 +58,7 @@ func _find_valid_path_points() -> void:
 	var step = 15.0
 	for d in range(0, int(length), int(step)):
 		var pt = path_node.to_global(curve.sample_baked(d))
-		if pt.distance_to(global_position) <= data.attack_range:
+		if pt.distance_to(global_position) <= get_current_range():
 			valid_path_points.append(pt)
 
 func _on_global_tower_selected(tower: Node2D) -> void:
@@ -56,7 +70,7 @@ func set_show_range(is_visible: bool) -> void:
 
 func _draw() -> void:
 	if show_range and data:
-		draw_circle(Vector2.ZERO, data.attack_range, Color(0.2, 0.8, 1.0, 0.2))
+		draw_circle(Vector2.ZERO, get_current_range(), Color(0.2, 0.8, 1.0, 0.2))
 
 func _update_stats() -> void:
 	if targeting_component:
@@ -66,9 +80,9 @@ func _update_stats() -> void:
 			col_shape.shape.resource_local_to_scene = true
 			
 		if col_shape.shape is CircleShape2D: 
-			col_shape.shape.radius = data.attack_range
+			col_shape.shape.radius = get_current_range()
 			
-	attack_timer.wait_time = data.attack_cooldown
+	attack_timer.wait_time = get_current_cooldown()
 	if attack_timer.is_stopped():
 		attack_timer.start()
 		
@@ -79,7 +93,7 @@ func _on_attack_timer_timeout() -> void:
 	if not data or not projectile_scene or not targeting_component: return
 	
 	if data.effect_type == "ice_aoe":
-		return # Ice aura doesn't shoot
+		return 
 		
 	if data.effect_type == "poison_path" or data.effect_type == "fire_path":
 		_spawn_trap_randomly()
@@ -96,11 +110,11 @@ func _shoot(target: Node2D) -> void:
 	var proj = projectile_scene.instantiate()
 	get_tree().current_scene.add_child(proj) 
 	proj.global_position = global_position
-	proj.setup(target, data.attack_damage, data.projectile_speed, data.color, data.effect_type, data.effect_value)
+	proj.setup(target, get_current_damage(), data.projectile_speed, data.color, data.effect_type, get_current_effect_value())
 
 func _on_enemy_entered_aura(enemy: Node2D) -> void:
 	if enemy.has_method("add_slow"):
-		enemy.add_slow(data.effect_value)
+		enemy.add_slow(get_current_effect_value())
 
 func _on_enemy_exited_aura(enemy: Node2D) -> void:
 	if enemy.has_method("remove_slow"):
@@ -134,63 +148,30 @@ func _spawn_trap_randomly() -> void:
 	get_tree().current_scene.add_child(trap)
 	
 	if e_type == "fire_path":
-		# Fire paths disappear after 3 seconds
 		var timer = get_tree().create_timer(3.0)
 		timer.timeout.connect(func(): if is_instance_valid(trap): trap.queue_free())
-	# Poison path stays forever (accumulates) until hit
+	elif e_type == "poison_path":
+		var timer = get_tree().create_timer(10.0)
+		timer.timeout.connect(func(): if is_instance_valid(trap): trap.queue_free())
 
 func _on_trap_area_entered(area: Area2D, trap: Area2D, e_type: String) -> void:
 	if area is HurtboxComponent and area.owner and area.owner.is_in_group("enemies"):
 		if e_type == "poison_path":
 			if area.owner.has_method("apply_poison"):
-				# Applying poison status
-				area.owner.apply_poison(data.attack_damage, 3.0)
+				area.owner.apply_poison(get_current_damage(), 3.0)
 			if is_instance_valid(trap): trap.queue_free()
 		elif e_type == "fire_path":
 			if area.owner.has_method("apply_burn"):
-				area.owner.apply_burn(data.attack_damage, 3.0)
+				area.owner.apply_burn(get_current_damage(), 3.0)
 
 func _on_texture_button_pressed() -> void:
 	GameManager.tower_selected.emit(self)
-
-func can_upgrade() -> bool:
-	return total_upgrades < max_total_upgrades
-
-func upgrade_damage() -> void:
-	if not can_upgrade(): return
-	var cost = get_damage_cost()
-	if GameManager.spend_xp(cost):
-		damage_level += 1
-		total_upgrades += 1
-		data.attack_damage += max(1, int(data.attack_damage * 0.5))
-
-func upgrade_fire_rate() -> void:
-	if not can_upgrade(): return
-	var cost = get_fire_rate_cost()
-	if GameManager.spend_xp(cost):
-		fire_rate_level += 1
-		total_upgrades += 1
-		data.attack_cooldown *= 0.8
-		_update_stats()
-
-func upgrade_range() -> void:
-	if not can_upgrade(): return
-	var cost = get_range_cost()
-	if GameManager.spend_xp(cost):
-		range_level += 1
-		total_upgrades += 1
-		data.attack_range += 30.0 
-		_update_stats()
-
-func get_damage_cost() -> int: return base_upgrade_cost * (damage_level)
-func get_fire_rate_cost() -> int: return base_upgrade_cost * (fire_rate_level)
-func get_range_cost() -> int: return base_upgrade_cost * (range_level)
 
 func _apply_buff_to_towers() -> void:
 	var towers = get_tree().get_nodes_in_group("towers")
 	for t in towers:
 		if t != self and is_instance_valid(t):
-			if t.global_position.distance_to(global_position) <= data.attack_range:
-				if "data" in t and is_instance_valid(t.data):
+			if t.global_position.distance_to(global_position) <= get_current_range():
+				if t.has_method("get_current_cooldown"):
 					if t.attack_timer:
-						t.attack_timer.start(t.data.attack_cooldown / data.effect_value)
+						t.attack_timer.start(t.get_current_cooldown() / get_current_effect_value())

@@ -27,9 +27,7 @@ var current_crafting_items: Array[String] = []
 
 @onready var upgrade_bar: VBoxContainer = $UpgradeBar
 @onready var stats_label: Label = $UpgradeBar/StatsLabel
-@onready var btn_upg_dmg: Button = $UpgradeBar/BtnDamage
-@onready var btn_upg_spd: Button = $UpgradeBar/BtnSpeed
-@onready var btn_upg_rng: Button = $UpgradeBar/BtnRange
+
 @onready var btn_close_upg: Button = $UpgradeBar/BtnClose
 @onready var btn_sell_tower: Button = $UpgradeBar/BtnSell
 
@@ -63,11 +61,10 @@ func _ready() -> void:
 	if auto_start_checkbox: auto_start_checkbox.toggled.connect(_on_auto_start_toggled)
 	if speed_checkbox: speed_checkbox.toggled.connect(func(pressed): Engine.time_scale = 2.0 if pressed else 1.0)
 		
-	if btn_upg_dmg: btn_upg_dmg.pressed.connect(func(): if selected_tower: selected_tower.upgrade_damage(); _update_upgrade_labels())
-	if btn_upg_spd: btn_upg_spd.pressed.connect(func(): if selected_tower: selected_tower.upgrade_fire_rate(); _update_upgrade_labels())
-	if btn_upg_rng: btn_upg_rng.pressed.connect(func(): if selected_tower: selected_tower.upgrade_range(); _update_upgrade_labels())
+
 	if btn_close_upg: btn_close_upg.pressed.connect(func(): GameManager.tower_deselected.emit())
 	if btn_sell_tower: btn_sell_tower.pressed.connect(_on_sell_tower_pressed)
+	if has_node("BtnSkillTree"): $BtnSkillTree.pressed.connect(_on_btn_skill_tree_pressed)
 	
 	_on_tower_deselected() # Esconde de inÃ­cio
 
@@ -95,27 +92,10 @@ func _update_upgrade_labels() -> void:
 	
 	if stats_label:
 		stats_label.text = "Dano: %d\nTiros/s: %.1f\nAlcance: %d" % [
-			selected_tower.data.attack_damage,
-			1.0 / selected_tower.data.attack_cooldown,
-			selected_tower.data.attack_range
+			selected_tower.get_current_damage(),
+			1.0 / selected_tower.get_current_cooldown(),
+			selected_tower.get_current_range()
 		]
-	
-	var is_maxed = selected_tower.total_upgrades >= selected_tower.max_total_upgrades
-	
-	if btn_upg_dmg: 
-		btn_upg_dmg.text = "Dano (Lvl " + str(selected_tower.damage_level) + ") - $" + str(selected_tower.get_damage_cost())
-		btn_upg_dmg.disabled = is_maxed
-	if btn_upg_spd: 
-		btn_upg_spd.text = "Veloc. (Lvl " + str(selected_tower.fire_rate_level) + ") - $" + str(selected_tower.get_fire_rate_cost())
-		btn_upg_spd.disabled = is_maxed
-	if btn_upg_rng: 
-		btn_upg_rng.text = "Raio (Lvl " + str(selected_tower.range_level) + ") - $" + str(selected_tower.get_range_cost())
-		btn_upg_rng.disabled = is_maxed
-
-	if is_maxed:
-		if btn_upg_dmg: btn_upg_dmg.text = "Dano (MAX)"
-		if btn_upg_spd: btn_upg_spd.text = "Veloc. (MAX)"
-		if btn_upg_rng: btn_upg_rng.text = "Raio (MAX)"
 
 func _on_start_wave_pressed() -> void:
 	GameManager.start_wave_requested.emit()
@@ -289,3 +269,13 @@ func _on_item_dropped(item_name: String) -> void:
 	tween.tween_property(label, "position:y", label.position.y - 80.0, 1.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 	tween.parallel().tween_property(label, "modulate:a", 0.0, 1.5).set_ease(Tween.EASE_IN)
 	tween.tween_callback(label.queue_free)
+
+var skill_tree_scene = preload("res://scenes/skill_tree.tscn")
+var skill_tree_instance: CanvasLayer = null
+
+func _on_btn_skill_tree_pressed():
+	if not skill_tree_instance:
+		skill_tree_instance = skill_tree_scene.instantiate()
+		add_child(skill_tree_instance)
+	skill_tree_instance.show()
+	get_tree().paused = true

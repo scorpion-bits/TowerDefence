@@ -99,6 +99,7 @@ func _on_enemy_destroyed() -> void:
 
 func _end_wave() -> void:
 	is_wave_active = false
+	GameManager.add_skill_point()
 	if current_wave == 100:
 		GameManager.victory.emit()
 	elif auto_start:
