@@ -46,7 +46,7 @@ func _apply_effect(enemy: Node2D) -> void:
 	elif effect_type == "instakill":
 		var is_boss = enemy.scale.x > 1.2
 		if not is_boss and enemy.has_node("HealthComponent"):
-			enemy.get_node("HealthComponent").current_health = 0
+			enemy.get_node("HealthComponent").take_damage(99999)
 	elif effect_type == "ice_aoe":
 		var enemies = get_tree().get_nodes_in_group("enemies")
 		for e in enemies:

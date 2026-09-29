@@ -12,16 +12,23 @@ signal tower_selected(tower: Node2D)
 signal tower_deselected
 signal tower_inventory_changed
 signal inventory_changed
+signal item_dropped(item_name: String)
 
 var xp: int = 150
 
 var tower_inventory: Dictionary = {"Esqueleto (Básico)": 1}
 
 var inventory: Dictionary = {
-	"Pedra": 5, "Vagalume": 5, "Mandrágora": 5, "Vitória Régia": 5,
-	"Gelo": 5, "Palha": 5, "Osso": 5, "Asas de Borboleta": 5,
-	"Magma": 5, "Graveto": 5, "Glóbulos Oculares": 5, "Espinhos de Rosa": 5
+	"Pedra": 0, "Vagalume": 0, "Mandrágora": 0, "Vitória Régia": 0,
+	"Gelo": 0, "Palha": 0, "Osso": 0, "Asas de Borboleta": 0,
+	"Magma": 0, "Graveto": 0, "Glóbulos Oculares": 0, "Espinhos de Rosa": 0
 }
+
+func _ready() -> void:
+	var item_keys = inventory.keys()
+	item_keys.shuffle()
+	for i in range(4):
+		inventory[item_keys[i]] = 2
 
 var recipes = {
 	"Espantalho (Buff)": ["Graveto", "Palha"],
@@ -55,9 +62,10 @@ func take_damage(amount: int) -> void:
 		print("game over")
 
 func roll_loot() -> void:
-	# 35% chance to drop a random material
-	if randf() < 0.35:
+	# 5% chance to drop a random material
+	if randf() < 0.05:
 		var items = inventory.keys()
 		var item = items[randi() % items.size()]
 		inventory[item] += 1
 		inventory_changed.emit()
+		item_dropped.emit(item)

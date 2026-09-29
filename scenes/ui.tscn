@@ -64,17 +64,16 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -239.0
+offset_left = -280.0
 offset_top = -400.0
 grow_horizontal = 0
 grow_vertical = 0
 
 [node name="TabContainer" type="TabContainer" parent="BuildPanel" unique_id=1701515894]
 layout_mode = 2
-current_tab = 1
+current_tab = 0
 
 [node name="Construir" type="MarginContainer" parent="BuildPanel/TabContainer" unique_id=1618524958]
-visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
@@ -93,6 +92,7 @@ theme_override_constants/v_separation = 10
 columns = 2
 
 [node name="Crafting" type="MarginContainer" parent="BuildPanel/TabContainer" unique_id=1865528553]
+visible = false
 layout_mode = 2
 theme_override_constants/margin_left = 10
 theme_override_constants/margin_top = 10
@@ -156,6 +156,23 @@ text = "Inventário"
 layout_mode = 2
 columns = 4
 
+[node name="Receitas" type="MarginContainer" parent="BuildPanel/TabContainer" unique_id=1447163425]
+visible = false
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+metadata/_tab_index = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="BuildPanel/TabContainer/Receitas" unique_id=1420249199]
+layout_mode = 2
+horizontal_scroll_mode = 0
+
+[node name="RecipesVBox" type="VBoxContainer" parent="BuildPanel/TabContainer/Receitas/ScrollContainer" unique_id=1192645615]
+layout_mode = 2
+theme_override_constants/separation = 5
+
 [node name="UpgradeBar" type="VBoxContainer" parent="." unique_id=291445887]
 visible = false
 anchors_preset = 1
@@ -181,6 +198,11 @@ text = "Vell-Ataque"
 [node name="BtnRange" type="Button" parent="UpgradeBar" unique_id=2137405753]
 layout_mode = 2
 text = "Range
+"
+
+[node name="BtnSell" type="Button" parent="UpgradeBar" unique_id=565903358]
+layout_mode = 2
+text = "Remover Torre
 "
 
 [node name="BtnClose" type="Button" parent="UpgradeBar" unique_id=55782426]

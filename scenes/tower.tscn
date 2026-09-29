@@ -2,7 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://vb4l6jpg3uvc" path="res://icon.svg" id="1_2x682"]
 [ext_resource type="Script" uid="uid://c5r3gdcbd5nid" path="res://scripts/Tower/tower.gd" id="1_ay4al"]
-[ext_resource type="Resource" uid="uid://byibr7ksnpfv3" path="res://resources/towers/basic_tower.tres" id="2_jfguu"]
+[ext_resource type="Resource" path="res://resources/towers/esqueleto.tres" id="2_jfguu"]
 [ext_resource type="PackedScene" uid="uid://bj88lg0tnqwnl" path="res://scenes/projectile.tscn" id="3_85u2j"]
 [ext_resource type="Script" uid="uid://daww6xjqgosau" path="res://scripts/components/targeting_component.gd" id="3_ktxwe"]
 

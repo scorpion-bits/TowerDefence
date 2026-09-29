@@ -89,9 +89,6 @@ func _spawn_enemy() -> void:
 			
 	new_enemy.data = modified_data
 	
-	var hp = new_enemy.get_node("HealthComponent")
-	if hp: hp.died.connect(_on_enemy_destroyed)
-	
 	path_to_spawn_on.add_child(new_enemy)
 	new_enemy.tree_exited.connect(_on_enemy_destroyed)
 

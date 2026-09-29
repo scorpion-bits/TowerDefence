@@ -18,18 +18,20 @@ var current_crafting_items: Array[String] = []
 @onready var restart_button: Button = $GameOverPanel/VBoxContainer/RestartButton
 
 @onready var grid_container: GridContainer = $BuildPanel/TabContainer/Construir/ScrollContainer/GridContainer
+@onready var recipes_vbox: VBoxContainer = $BuildPanel/TabContainer/Receitas/ScrollContainer/RecipesVBox
 
 @onready var start_wave_button: Button = $Functions/StartWaveButton
 @onready var auto_start_checkbox: CheckBox = $Functions/AutoStartCheckbox
 @onready var speed_checkbox: CheckBox = $Functions/SpeedCheckbox
 
-# --- NOVO: Painel de Upgrades ---
+
 @onready var upgrade_bar: VBoxContainer = $UpgradeBar
 @onready var stats_label: Label = $UpgradeBar/StatsLabel
 @onready var btn_upg_dmg: Button = $UpgradeBar/BtnDamage
 @onready var btn_upg_spd: Button = $UpgradeBar/BtnSpeed
 @onready var btn_upg_rng: Button = $UpgradeBar/BtnRange
 @onready var btn_close_upg: Button = $UpgradeBar/BtnClose
+@onready var btn_sell_tower: Button = $UpgradeBar/BtnSell
 
 var selected_tower: Node2D = null
 
@@ -41,6 +43,7 @@ func _ready() -> void:
 	GameManager.tower_deselected.connect(_on_tower_deselected)
 	GameManager.game_over.connect(_on_game_over)
 	GameManager.victory.connect(_on_victory)
+	GameManager.item_dropped.connect(_on_item_dropped)
 	
 	if restart_button: restart_button.pressed.connect(_on_restart_pressed)
 	if craft_button: craft_button.pressed.connect(_on_craft_pressed)
@@ -54,6 +57,7 @@ func _ready() -> void:
 	GameManager.tower_inventory_changed.connect(_load_towers)
 	GameManager.inventory_changed.connect(_update_inventory_ui)
 	_load_towers()
+	_load_recipes()
 	
 	if start_wave_button: start_wave_button.pressed.connect(_on_start_wave_pressed)
 	if auto_start_checkbox: auto_start_checkbox.toggled.connect(_on_auto_start_toggled)
@@ -63,8 +67,17 @@ func _ready() -> void:
 	if btn_upg_spd: btn_upg_spd.pressed.connect(func(): if selected_tower: selected_tower.upgrade_fire_rate(); _update_upgrade_labels())
 	if btn_upg_rng: btn_upg_rng.pressed.connect(func(): if selected_tower: selected_tower.upgrade_range(); _update_upgrade_labels())
 	if btn_close_upg: btn_close_upg.pressed.connect(func(): GameManager.tower_deselected.emit())
+	if btn_sell_tower: btn_sell_tower.pressed.connect(_on_sell_tower_pressed)
 	
 	_on_tower_deselected() # Esconde de inÃ­cio
+
+func _on_sell_tower_pressed() -> void:
+	if selected_tower and is_instance_valid(selected_tower):
+		var tower_name = selected_tower.data.tower_name
+		GameManager.tower_inventory[tower_name] = GameManager.tower_inventory.get(tower_name, 0) + 1
+		GameManager.tower_inventory_changed.emit()
+		selected_tower.queue_free()
+		GameManager.tower_deselected.emit()
 
 func _on_tower_selected(tower: Node2D) -> void:
 	selected_tower = tower
@@ -140,7 +153,6 @@ func _on_restart_pressed() -> void:
 
 
 func _load_towers() -> void:
-	# Limpar botões antigos de placeholder na cena
 	for child in grid_container.get_children():
 		child.queue_free()
 		
@@ -218,7 +230,6 @@ func _update_crafting_slots() -> void:
 		result_slot.text = ""
 
 func _check_recipe() -> String:
-	# Sort to make order independent
 	var current_sorted = current_crafting_items.duplicate()
 	current_sorted.sort()
 	
@@ -239,3 +250,42 @@ func _on_craft_pressed() -> void:
 		_update_crafting_slots()
 		_update_inventory_ui()
 		GameManager.tower_inventory_changed.emit()
+
+func _load_recipes() -> void:
+	if not recipes_vbox: return
+	
+	for child in recipes_vbox.get_children():
+		child.queue_free()
+		
+	for tower_name in GameManager.recipes:
+		var req = GameManager.recipes[tower_name]
+		var label = Label.new()
+		label.text = tower_name + ":\n  " + " + ".join(req)
+		label.autowrap_mode = TextServer.AUTOWRAP_WORD
+		recipes_vbox.add_child(label)
+		
+		var sep = HSeparator.new()
+		recipes_vbox.add_child(sep)
+
+func _on_item_dropped(item_name: String) -> void:
+	var label = Label.new()
+	label.text = "+1 " + item_name
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.custom_minimum_size = Vector2(300, 50)
+	label.add_theme_font_size_override("font_size", 24)
+	label.add_theme_color_override("font_color", Color(0.2, 1.0, 0.2, 1)) # Green color
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 4)
+	
+	# Position near center top, with some randomness
+	var viewport_size = get_viewport().get_visible_rect().size
+	var rx = randf_range(-40.0, 40.0)
+	var ry = randf_range(-20.0, 20.0)
+	label.position = Vector2((viewport_size.x / 2.0) - 150.0 + rx, (viewport_size.y / 2.0) - 150.0 + ry)
+	
+	add_child(label)
+	
+	var tween = create_tween()
+	tween.tween_property(label, "position:y", label.position.y - 80.0, 1.5).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	tween.parallel().tween_property(label, "modulate:a", 0.0, 1.5).set_ease(Tween.EASE_IN)
+	tween.tween_callback(label.queue_free)
