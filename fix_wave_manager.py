@@ -1,4 +1,6 @@
-extends Node
+﻿import os
+
+content = '''extends Node
 
 @export var enemy_scene: PackedScene
 @export var path_to_spawn_on: Path2D
@@ -88,6 +90,7 @@ func _spawn_enemy() -> void:
 		modified_data.reward += int(current_wave / 2.0)
 			
 	new_enemy.data = modified_data
+	new_enemy.scale *= 1.5
 	
 	var hp = new_enemy.get_node("HealthComponent")
 	if hp: hp.died.connect(_on_enemy_destroyed)
@@ -106,3 +109,7 @@ func _end_wave() -> void:
 		GameManager.victory.emit()
 	elif auto_start:
 		start_next_wave()
+'''
+
+with open('scripts/Level/wave_manager.gd', 'w', encoding='utf-8') as f:
+    f.write(content)

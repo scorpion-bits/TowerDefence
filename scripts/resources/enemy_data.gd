@@ -6,4 +6,5 @@ extends Resource
 @export var max_health: int = 10
 @export var reward: int = 5
 @export var damage_to_player: int = 1
-@export var color: Color = Color.RED
+@export var color: Color = Color.WHITE
+@export var sprite_frames: SpriteFrames

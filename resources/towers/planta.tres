@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="TowerData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/tower_data.gd" id="1_2hfd5"]
+
+[resource]
+script = ExtResource("1_2hfd5")
+tower_name = "Planta Peçonhenta"
+cost = 100
+attack_range = 130.0
+attack_damage = 3
+attack_cooldown = 1.5
+projectile_speed = 200.0
+color = Color(0, 1, 0, 1)
+effect_type = "poison_path"
+effect_value = 3.0

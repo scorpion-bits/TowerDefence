@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="TowerData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/tower_data.gd" id="1_2hfd5"]
+
+[resource]
+script = ExtResource("1_2hfd5")
+tower_name = "Espantalho (Buff)"
+cost = 150
+attack_range = 200.0
+attack_damage = 0
+attack_cooldown = 1.0
+projectile_speed = 0.0
+color = Color(1, 1, 0, 1)
+effect_type = "buff"
+effect_value = 1.5

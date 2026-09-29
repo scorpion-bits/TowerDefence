@@ -16,6 +16,7 @@ var total_upgrades: int = 0
 var max_total_upgrades: int = 5
 
 func _ready() -> void:
+	add_to_group("towers")
 	if data:
 		if sprite: sprite.modulate = data.color
 		attack_timer.timeout.connect(_on_attack_timer_timeout)
@@ -59,10 +60,13 @@ func _on_attack_timer_timeout() -> void:
 	if target: _shoot(target)
 
 func _shoot(target: Node2D) -> void:
+	if data.effect_type == "buff":
+		_apply_buff_to_towers()
+		return
 	var proj = projectile_scene.instantiate()
 	get_tree().current_scene.add_child(proj) 
 	proj.global_position = global_position
-	proj.setup(target, data.attack_damage, data.projectile_speed, data.color)
+	proj.setup(target, data.attack_damage, data.projectile_speed, data.color, data.effect_type, data.effect_value)
 
 func _on_texture_button_pressed() -> void:
 	GameManager.tower_selected.emit(self)
@@ -75,7 +79,7 @@ func can_upgrade() -> bool:
 func upgrade_damage() -> void:
 	if not can_upgrade(): return
 	var cost = get_damage_cost()
-	if GameManager.spend_gold(cost):
+	if GameManager.spend_xp(cost):
 		damage_level += 1
 		total_upgrades += 1
 		# Balanceamento: Aumenta o dano em 50%, ou no mínimo 1 (bom pra metralhadora que tem dano 1)
@@ -84,7 +88,7 @@ func upgrade_damage() -> void:
 func upgrade_fire_rate() -> void:
 	if not can_upgrade(): return
 	var cost = get_fire_rate_cost()
-	if GameManager.spend_gold(cost):
+	if GameManager.spend_xp(cost):
 		fire_rate_level += 1
 		total_upgrades += 1
 		data.attack_cooldown *= 0.8
@@ -93,7 +97,7 @@ func upgrade_fire_rate() -> void:
 func upgrade_range() -> void:
 	if not can_upgrade(): return
 	var cost = get_range_cost()
-	if GameManager.spend_gold(cost):
+	if GameManager.spend_xp(cost):
 		range_level += 1
 		total_upgrades += 1
 		data.attack_range += 30.0 
@@ -102,3 +106,15 @@ func upgrade_range() -> void:
 func get_damage_cost() -> int: return base_upgrade_cost * (damage_level)
 func get_fire_rate_cost() -> int: return base_upgrade_cost * (fire_rate_level)
 func get_range_cost() -> int: return base_upgrade_cost * (range_level)
+
+func _apply_buff_to_towers() -> void:
+	var towers = get_tree().get_nodes_in_group("towers")
+	for t in towers:
+		if t != self and is_instance_valid(t):
+			if t.global_position.distance_to(global_position) <= data.attack_range:
+				if "data" in t and is_instance_valid(t.data):
+					# Buff simple: reset wait time, double fire rate temporarily
+					if t.attack_timer:
+						t.attack_timer.start(t.data.attack_cooldown / data.effect_value)
+
+

@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://ny6qi8jqglvq"]
+
+[ext_resource type="Script" uid="uid://b81wsx51g8yu2" path="res://scripts/resources/enemy_data.gd" id="1_pa3ob"]
+[ext_resource type="Texture2D" uid="uid://vb4l6jpg3uvc" path="res://icon.svg" id="2_bgaur"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_bgaur"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_bgaur")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
+
+[resource]
+script = ExtResource("1_pa3ob")
+color = Color(0.9764706, 0.35686275, 0, 1)
+sprite_frames = SubResource("SpriteFrames_bgaur")
+metadata/_custom_type_script = "uid://b81wsx51g8yu2"

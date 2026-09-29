@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="TowerData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/tower_data.gd" id="1_2hfd5"]
+
+[resource]
+script = ExtResource("1_2hfd5")
+tower_name = "Golem de Fogo (Chamas)"
+cost = 130
+attack_range = 120.0
+attack_damage = 2
+attack_cooldown = 0.1
+projectile_speed = 300.0
+color = Color(1, 0.3, 0, 1)
+effect_type = "fire_path"
+effect_value = 3.0

@@ -1,36 +1,30 @@
 [gd_scene format=3 uid="uid://c1uddkr2uilng"]
 
 [ext_resource type="Script" uid="uid://bvyrp5u36m5ci" path="res://scripts/UI/ui.gd" id="1_nt7q6"]
-[ext_resource type="Resource" uid="uid://byibr7ksnpfv3" path="res://resources/towers/basic_tower.tres" id="2_x4jx1"]
-[ext_resource type="Resource" path="res://resources/towers/sniper_tower.tres" id="3_gdt2y"]
-[ext_resource type="Resource" path="res://resources/towers/mg_tower.tres" id="4_wm3ai"]
 
 [node name="UI" type="CanvasLayer" unique_id=1310874063]
 script = ExtResource("1_nt7q6")
-basic_tower_data = ExtResource("2_x4jx1")
-sniper_tower_data = ExtResource("3_gdt2y")
-mg_tower_data = ExtResource("4_wm3ai")
 
 [node name="Status" type="VBoxContainer" parent="." unique_id=1012246914]
-offset_left = 41.0
-offset_top = 38.0
-offset_right = 128.0
-offset_bottom = 88.0
+offset_left = 10.0
+offset_top = 12.0
+offset_right = 97.0
+offset_bottom = 62.0
 
 [node name="LivesLabel" type="Label" parent="Status" unique_id=126373767]
 layout_mode = 2
 text = "Lives"
 
-[node name="GoldLabel" type="Label" parent="Status" unique_id=180945710]
+[node name="xpLabel" type="Label" parent="Status" unique_id=180945710]
 layout_mode = 2
-text = "Golds"
+text = "XP"
 
 [node name="Wave" type="HBoxContainer" parent="." unique_id=201756152]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -22.5
-offset_right = 22.5
+offset_left = -28.0
+offset_right = 28.0
 offset_bottom = 40.0
 grow_horizontal = 2
 
@@ -45,10 +39,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -230.0
-offset_top = -71.0
-offset_right = -31.0
-offset_bottom = -31.0
+offset_left = -254.0
+offset_top = -731.0
+offset_right = -5.0
+offset_bottom = -691.0
 grow_horizontal = 0
 grow_vertical = 0
 
@@ -64,44 +58,114 @@ text = "Auto-Play"
 layout_mode = 2
 text = "Start Wave"
 
-[node name="SideBar" type="VBoxContainer" parent="." unique_id=1925529463]
-anchors_preset = 6
+[node name="BuildPanel" type="PanelContainer" parent="." unique_id=1754334566]
+anchors_preset = 3
 anchor_left = 1.0
-anchor_top = 0.5
+anchor_top = 1.0
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = -20.0
-offset_bottom = 20.0
+anchor_bottom = 1.0
+offset_left = -239.0
+offset_top = -400.0
 grow_horizontal = 0
-grow_vertical = 2
-size_flags_horizontal = 8
+grow_vertical = 0
 
-[node name="BtnBasic" type="Button" parent="SideBar" unique_id=56323295]
+[node name="TabContainer" type="TabContainer" parent="BuildPanel" unique_id=1701515894]
 layout_mode = 2
-tooltip_text = "Torre que atira rápido e dá dano médio"
-text = "Torre Básica - $50"
+current_tab = 1
 
-[node name="BtnSniper" type="Button" parent="SideBar" unique_id=1986773516]
+[node name="Construir" type="MarginContainer" parent="BuildPanel/TabContainer" unique_id=1618524958]
+visible = false
 layout_mode = 2
-text = "Sniper - $100"
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+metadata/_tab_index = 0
 
-[node name="BtnMG" type="Button" parent="SideBar" unique_id=546714246]
+[node name="ScrollContainer" type="ScrollContainer" parent="BuildPanel/TabContainer/Construir" unique_id=838575275]
 layout_mode = 2
-text = "Metralhadora - $75"
+horizontal_scroll_mode = 0
+
+[node name="GridContainer" type="GridContainer" parent="BuildPanel/TabContainer/Construir/ScrollContainer" unique_id=60925785]
+layout_mode = 2
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 2
+
+[node name="Crafting" type="MarginContainer" parent="BuildPanel/TabContainer" unique_id=1865528553]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+metadata/_tab_index = 1
+
+[node name="CraftVBox" type="VBoxContainer" parent="BuildPanel/TabContainer/Crafting" unique_id=677433047]
+layout_mode = 2
+
+[node name="Space" type="Control" parent="BuildPanel/TabContainer/Crafting/CraftVBox" unique_id=2119428785]
+custom_minimum_size = Vector2(0, 15)
+layout_mode = 2
+
+[node name="CaldLabel" type="Label" parent="BuildPanel/TabContainer/Crafting/CraftVBox" unique_id=6445695]
+layout_mode = 2
+text = "Caldeirão"
+
+[node name="SlotsHBox" type="HBoxContainer" parent="BuildPanel/TabContainer/Crafting/CraftVBox" unique_id=599987990]
+layout_mode = 2
+
+[node name="Slot0" type="Button" parent="BuildPanel/TabContainer/Crafting/CraftVBox/SlotsHBox" unique_id=573000883]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="Slot1" type="Button" parent="BuildPanel/TabContainer/Crafting/CraftVBox/SlotsHBox" unique_id=1776447369]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="Slot2" type="Button" parent="BuildPanel/TabContainer/Crafting/CraftVBox/SlotsHBox" unique_id=977919134]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+
+[node name="EqLabel" type="Label" parent="BuildPanel/TabContainer/Crafting/CraftVBox/SlotsHBox" unique_id=898118899]
+layout_mode = 2
+text = " = "
+
+[node name="ResultSlot" type="Button" parent="BuildPanel/TabContainer/Crafting/CraftVBox/SlotsHBox" unique_id=1223303674]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+disabled = true
+
+[node name="HBoxButtons" type="HBoxContainer" parent="BuildPanel/TabContainer/Crafting/CraftVBox" unique_id=797124230]
+layout_mode = 2
+
+[node name="CraftButton" type="Button" parent="BuildPanel/TabContainer/Crafting/CraftVBox/HBoxButtons" unique_id=919397399]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Craftar!"
+
+[node name="ClearButton" type="Button" parent="BuildPanel/TabContainer/Crafting/CraftVBox/HBoxButtons" unique_id=1646580327]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Limpar"
+
+[node name="InvLabel" type="Label" parent="BuildPanel/TabContainer/Crafting/CraftVBox" unique_id=1570778502]
+layout_mode = 2
+text = "Inventário"
+
+[node name="InventoryGrid" type="GridContainer" parent="BuildPanel/TabContainer/Crafting/CraftVBox" unique_id=1128573175]
+layout_mode = 2
+columns = 4
 
 [node name="UpgradeBar" type="VBoxContainer" parent="." unique_id=291445887]
 visible = false
-anchors_preset = 6
+anchors_preset = 1
 anchor_left = 1.0
-anchor_top = 0.5
 anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -97.0
-offset_top = -68.0
-offset_bottom = 68.0
+offset_left = -101.0
+offset_top = 130.0
+offset_right = -4.0
+offset_bottom = 293.0
 grow_horizontal = 0
-grow_vertical = 2
 
 [node name="StatsLabel" type="Label" parent="UpgradeBar" unique_id=1215019884]
 layout_mode = 2
@@ -123,3 +187,37 @@ text = "Range
 layout_mode = 2
 text = "Close
 "
+
+[node name="GameOverPanel" type="ColorRect" parent="." unique_id=1717113857]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GameOverPanel" unique_id=213422380]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -100.0
+offset_top = -50.0
+offset_right = 100.0
+offset_bottom = 50.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="GameOverPanel/VBoxContainer" unique_id=529404365]
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+text = "GAME OVER"
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="GameOverPanel/VBoxContainer" unique_id=933017859]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+text = "Reiniciar"

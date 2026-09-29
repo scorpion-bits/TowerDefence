@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://tktaud88yo0" path="res://scripts/Level/level.gd" id="1_mx8sn"]
 [ext_resource type="PackedScene" uid="uid://ts2vkd13kk0t" path="res://scenes/tower.tscn" id="2_ppgk2"]
+[ext_resource type="Script" uid="uid://beg2agdxnjr2w" path="res://scripts/Level/enemy_spawner.gd" id="3_2r41h"]
 [ext_resource type="PackedScene" uid="uid://blypxrtw4ha0b" path="res://scenes/tower_ghost.tscn" id="3_klq6b"]
 [ext_resource type="Texture2D" uid="uid://dhp0xntu8kyah" path="res://assets/TX Tileset Grass.png" id="3_ppgk2"]
 [ext_resource type="PackedScene" uid="uid://siqicbahjnds" path="res://scenes/enemy.tscn" id="4_klq6b"]
@@ -91,7 +92,7 @@ sources/0 = SubResource("TileSetAtlasSource_2r41h")
 
 [sub_resource type="Curve2D" id="Curve2D_b121j"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, -49, 124, 0, 0, 0, 0, 222, 125, 0, 0, 0, 0, 214, 446, 0, 0, 0, 0, 88, 446, 0, 0, 0, 0, 90, 639, 0, 0, 0, 0, 347, 641, 0, 0, 0, 0, 351, 322, 0, 0, 0, 0, 418, 320, 0, 0, 0, 0, 419, 189, 0, 0, 0, 0, 351, 188, 0, 0, 0, 0, 349, 62, 0, 0, 0, 0, 606, 59, 0, 0, 0, 0, 606, 120, 0, 0, 0, 0, 671, 124, 0, 0, 0, 0, 669, 320, 0, 0, 0, 0, 608, 320, 0, 0, 0, 0, 606, 446, 0, 0, 0, 0, 478, 449, 0, 0, 0, 0, 478, 637, 0, 0, 0, 0, 739, 638, 0, 0, 0, 0, 736, 505, 0, 0, 0, 0, 860, 502, 0, 0, 0, 0, 858, 577, 0, 0, 0, 0, 994, 578, 0, 0, 0, 0, 992, 382, 0, 0, 0, 0, 792, 381, 0, 0, 0, 0, 795, 59, 0, 0, 0, 0, 922, 58, 0, 0, 0, 0, 922, 124, 0, 0, 0, 0, 994, 125, 0, 0, 0, 0, 993, 256, 0, 0, 0, 0, 1073, 253)
+"points": PackedVector2Array(0, 0, 0, 0, -26, 125, 0, 0, 0, 0, 223, 125, 0, 0, 0, 0, 230, 447, 0, 0, 0, 0, 85, 439, 0, 0, 0, 0, 93, 631, 0, 0, 0, 0, 350, 639, 0, 0, 0, 0, 350, 315, 0, 0, 0, 0, 422, 309, 0, 0, 0, 0, 415, 185, 0, 0, 0, 0, 345, 185, 0, 0, 0, 0, 352, 53, 0, 0, 0, 0, 609, 58, 0, 0, 0, 0, 612, 117, 0, 0, 0, 0, 669, 125, 0, 0, 0, 0, 669, 312, 0, 0, 0, 0, 612, 317, 0, 0, 0, 0, 601, 442, 0, 0, 0, 0, 477, 447, 0, 0, 0, 0, 477, 636, 0, 0, 0, 0, 739, 636, 0, 0, 0, 0, 736, 509, 0, 0, 0, 0, 866, 509, 0, 0, 0, 0, 869, 569, 0, 0, 0, 0, 993, 569, 0, 0, 0, 0, 993, 377, 0, 0, 0, 0, 793, 369, 0, 0, 0, 0, 796, 58, 0, 0, 0, 0, 928, 60, 0, 0, 0, 0, 928, 115, 0, 0, 0, 0, 1001, 123, 0, 0, 0, 0, 998, 250, 0, 0, 0, 0, 1106, 253)
 }
 point_count = 32
 
@@ -106,6 +107,7 @@ tile_set = SubResource("TileSet_htqey")
 
 [node name="Path2D" type="Path2D" parent="." unique_id=1745873549]
 curve = SubResource("Curve2D_b121j")
+script = ExtResource("3_2r41h")
 
 [node name="EnemySpawner" type="Node" parent="." unique_id=1089284938 node_paths=PackedStringArray("path_to_spawn_on")]
 script = ExtResource("6_8c41q")

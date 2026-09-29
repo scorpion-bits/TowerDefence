@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="TowerData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/resources/tower_data.gd" id="1_2hfd5"]
+
+[resource]
+script = ExtResource("1_2hfd5")
+tower_name = "Esqueleto (Básico)"
+cost = 50
+attack_range = 150.0
+attack_damage = 5
+attack_cooldown = 1.0
+projectile_speed = 400.0
+color = Color(0.8, 0.8, 0.8, 1)
+effect_type = ""
+effect_value = 0.0

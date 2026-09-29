@@ -1,4 +1,6 @@
-extends Node
+﻿import os
+
+content = '''extends Node
 
 signal xp_changed(new_amount: int)
 signal lives_changed(new_amount: int)
@@ -11,7 +13,6 @@ signal wave_updated(wave_number: int)
 signal tower_selected(tower: Node2D)
 signal tower_deselected
 signal tower_inventory_changed
-signal inventory_changed
 
 var xp: int = 150
 
@@ -53,11 +54,7 @@ func take_damage(amount: int) -> void:
 	if lives <= 0:
 		game_over.emit()
 		print("game over")
+'''
 
-func roll_loot() -> void:
-	# 35% chance to drop a random material
-	if randf() < 0.35:
-		var items = inventory.keys()
-		var item = items[randi() % items.size()]
-		inventory[item] += 1
-		inventory_changed.emit()
+with open('scripts/Autoload/game_manager.gd', 'wb') as f:
+    f.write(content.encode('utf-8'))

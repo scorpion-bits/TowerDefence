@@ -25,12 +25,8 @@ func setup(data: TowerData) -> void:
 func _process(_delta: float) -> void:
 	global_position = get_global_mouse_position()
 	
-	var has_enough_gold = false
-	if tower_data:
-		has_enough_gold = GameManager.gold >= tower_data.cost
-	
 	# Se estiver colidindo com algo OU se estiver sem grana, fica vermelho
-	if overlapping_count > 0 or not has_enough_gold:
+	if overlapping_count > 0 :
 		is_valid_location = false
 		sprite.modulate = Color.RED
 		sprite.modulate.a = 0.6

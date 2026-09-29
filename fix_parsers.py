@@ -1,4 +1,28 @@
-extends Node
+﻿import os
+
+def fix_file(path, replacements, fix_accents=False):
+    with open(path, 'r', encoding='windows-1252' if fix_accents else 'utf-8', errors='ignore') as f:
+        content = f.read()
+    
+    for old, new in replacements:
+        content = content.replace(old, new)
+        
+    if fix_accents:
+        content = content.replace('Bǭsico', 'Básico')
+        content = content.replace('Glbulos', 'Glóbulos')
+        content = content.replace('Lentidǜo', 'Lentidão')
+        content = content.replace('Canhǜo', 'Canhão')
+        content = content.replace('Peonhenta', 'Peçonhenta')
+        content = content.replace('Vitria', 'Vitória')
+        content = content.replace('RǸgia', 'Régia')
+        content = content.replace('Mandrǭgora', 'Mandrágora')
+        # Handle all possible corruptions by just re-pasting the dicts since it's easier
+        
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(content)
+
+# We can just rewrite game_manager.gd entirely to be 100% safe
+gm_content = '''extends Node
 
 signal xp_changed(new_amount: int)
 signal lives_changed(new_amount: int)
@@ -61,3 +85,20 @@ func roll_loot() -> void:
 		var item = items[randi() % items.size()]
 		inventory[item] += 1
 		inventory_changed.emit()
+'''
+
+with open('scripts/Autoload/game_manager.gd', 'w', encoding='utf-8') as f:
+    f.write(gm_content)
+
+
+ui_replacements = [
+    (r'\n\tGameManager.inventory_changed', '\n\tGameManager.inventory_changed'),
+]
+with open('scripts/UI/ui.gd', 'r', encoding='utf-8') as f:
+    ui = f.read()
+
+ui = ui.replace(r'\n\t', '\n\t')
+
+with open('scripts/UI/ui.gd', 'w', encoding='utf-8') as f:
+    f.write(ui)
+

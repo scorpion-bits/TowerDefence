@@ -1,14 +1,21 @@
 extends PathFollow2D
 
 @export var data: EnemyData
+
+@onready var anim_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var health_component: HealthComponent = $HealthComponent
-@onready var sprite: Sprite2D = $Sprite2D
 
 func _ready() -> void:
+	loop = false
 	if data:
 		health_component.max_health = data.max_health
 		health_component.current_health = data.max_health
-		if sprite: sprite.modulate = data.color
+		
+		if anim_sprite and data.sprite_frames:
+			anim_sprite.sprite_frames = data.sprite_frames
+			anim_sprite.play("default")
+		elif anim_sprite:
+			anim_sprite.modulate = data.color
 			
 	if health_component:
 		health_component.died.connect(_on_died)
@@ -21,7 +28,8 @@ func _process(delta: float) -> void:
 			_reach_end()
 
 func _on_died() -> void:
-	GameManager.add_gold(data.reward)
+	GameManager.add_xp(data.reward)
+	GameManager.roll_loot()
 	queue_free()
 
 func _reach_end() -> void:
