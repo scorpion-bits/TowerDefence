@@ -50,24 +50,26 @@ var skill_tree_data: Dictionary = {
 		"value": 0.0,
 		"requires": []
 	},
-	"skel_dmg_1": {
-		"tower": "Esqueleto (Básico)",
-		"stat": "damage",
-		"value": 1.0,
-		"requires": ["base_start"]
-	},
-	"skel_spd_1": {
-		"tower": "Esqueleto (Básico)",
-		"stat": "fire_rate", 
-		"value": 0.1,
-		"requires": ["skel_dmg_1"]
-	},
-	"fire_dmg_1": {
-		"tower": "Golem de Fogo (Chamas)",
-		"stat": "damage",
-		"value": 2.0,
-		"requires": ["base_start"]
-	}
+	"esqueleto_base": { "tower": "Esqueleto (Básico)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
+	"esqueleto_range_1": { "tower": "Esqueleto (Básico)", "stat": "range", "value": 20.0, "requires": ["esqueleto_base"] },
+	"esqueleto_damage_1": { "tower": "Esqueleto (Básico)", "stat": "damage", "value": 1.0, "requires": ["esqueleto_base"] },
+	"esqueleto_spd_1": { "tower": "Esqueleto (Básico)", "stat": "fire_rate", "value": 0.15, "requires": ["esqueleto_base"] },
+	
+	"esqueleto_mirada_alta": { "tower": "Esqueleto (Básico)", "stat": "range", "value": 30.0, "requires": ["esqueleto_range_1"] },
+	"esqueleto_estilhaco": { "tower": "Esqueleto (Básico)", "stat": "special", "value": 0.0, "requires": ["esqueleto_damage_1"] },
+	"esqueleto_arco_duplo": { "tower": "Esqueleto (Básico)", "stat": "special", "value": 0.0, "requires": ["esqueleto_spd_1"] },
+	"esqueleto_chuva": { "tower": "Esqueleto (Básico)", "stat": "special", "value": 0.0, "requires": ["esqueleto_arco_duplo"], "exclusive_group": "esqueleto_tier3" },
+	"esqueleto_maldicao": { "tower": "Esqueleto (Básico)", "stat": "special", "value": 0.0, "requires": ["esqueleto_estilhaco"], "exclusive_group": "esqueleto_tier3" },
+	"esqueleto_perfurante": { "tower": "Esqueleto (Básico)", "stat": "special", "value": 0.0, "requires": ["esqueleto_mirada_alta"], "exclusive_group": "esqueleto_tier3" },
+
+	"fogo_base": { "tower": "Golem de Fogo (Chamas)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
+	"sapo_base": { "tower": "Sapo (Sniper)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
+	"olho_base": { "tower": "Olho Flutuante (Laser)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
+	"pedra_base": { "tower": "Golem de Pedra (Canhão)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
+	"espantalho_base": { "tower": "Espantalho (Buff)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
+	"gelo_base": { "tower": "Golem de Gelo (Lentidão)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
+	"planta_base": { "tower": "Planta Peçonhenta", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
+	
 }
 
 func _ready() -> void:
@@ -116,6 +118,14 @@ func get_next_skill_cost() -> int:
 func buy_skill(skill_id: String) -> bool:
 	if unlocked_skills.has(skill_id): return false
 	
+	if skill_tree_data.has(skill_id):
+		var data = skill_tree_data[skill_id]
+		if data.has("exclusive_group"):
+			for other_id in unlocked_skills:
+				var other_data = skill_tree_data.get(other_id)
+				if other_data and other_data.has("exclusive_group") and other_data.exclusive_group == data.exclusive_group:
+					return false
+	
 	var cost = get_next_skill_cost()
 	if skill_points >= cost:
 		skill_points -= cost
@@ -133,3 +143,6 @@ func get_tower_bonus(tower_name: String, stat: String) -> float:
 			if (data.tower == tower_name or data.tower == "Global") and data.stat == stat:
 				total_bonus += float(data.value)
 	return total_bonus
+
+func has_skill(skill_id: String) -> bool:
+	return unlocked_skills.has(skill_id)

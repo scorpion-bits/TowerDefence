@@ -31,6 +31,10 @@ func _on_close() -> void:
 func _input(event: InputEvent) -> void:
 	if not visible: return
 	
+	if event.is_action_pressed("ui_cancel"):
+		_on_close()
+		return
+	
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT or event.button_index == MOUSE_BUTTON_MIDDLE or event.button_index == MOUSE_BUTTON_RIGHT:
 			if event.pressed:
@@ -43,29 +47,41 @@ func _input(event: InputEvent) -> void:
 		container.position += (event.position - last_mouse_pos)
 		last_mouse_pos = event.position
 
-func _on_container_draw() -> void:
-	# Encontra todos os nós de habilidade
-	var nodes = {}
-	for child in container.get_children():
+func _get_all_skill_nodes(node: Node) -> Array:
+	var result = []
+	for child in node.get_children():
 		if child is SkillNode:
-			nodes[child.skill_id] = child
+			result.append(child)
+		result.append_array(_get_all_skill_nodes(child))
+	return result
+
+func _on_container_draw() -> void:
+	# Encontra todos os nós de habilidade recursivamente
+	var all_skill_nodes = _get_all_skill_nodes(container)
+	var nodes = {}
+	for child in all_skill_nodes:
+		nodes[child.skill_id] = child
 			
 	# Desenha as linhas baseadas nos requisitos
-	for child in container.get_children():
-		if child is SkillNode:
-			var data = GameManager.skill_tree_data.get(child.skill_id)
-			if data:
-				for req_id in data.requires:
-					if nodes.has(req_id):
-						var req_node = nodes[req_id]
-						var start_pos = child.position + child.size / 2.0
-						var end_pos = req_node.position + req_node.size / 2.0
-						
-						var color = Color(0.3, 0.3, 0.3, 1.0) # Locked
-						if GameManager.unlocked_skills.has(child.skill_id):
-							color = Color(1.0, 0.8, 0.2, 1.0) # Gold / Unlocked
-						elif child.has_reqs_met():
-							color = Color(0.5, 1.0, 0.5, 0.5) # Available line
-						
-						container.draw_line(start_pos, end_pos, color, 4.0)
-
+	for child in all_skill_nodes:
+		var data = GameManager.skill_tree_data.get(child.skill_id)
+		if data:
+			for req_id in data.requires:
+				if nodes.has(req_id):
+					var req_node = nodes[req_id]
+					
+					# Pega a posição global do centro dos nós
+					var start_global = child.get_global_rect().get_center()
+					var end_global = req_node.get_global_rect().get_center()
+					
+					# Converte para a posição local do container
+					var start_pos = container.get_global_transform().affine_inverse() * start_global
+					var end_pos = container.get_global_transform().affine_inverse() * end_global
+					
+					var color = Color(0.3, 0.3, 0.3, 1.0) # Locked
+					if GameManager.unlocked_skills.has(child.skill_id):
+						color = Color(1.0, 0.8, 0.2, 1.0) # Gold / Unlocked
+					elif child.has_reqs_met():
+						color = Color(0.5, 1.0, 0.5, 0.5) # Available line
+					
+					container.draw_line(start_pos, end_pos, color, 4.0)

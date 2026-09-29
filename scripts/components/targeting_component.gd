@@ -21,17 +21,20 @@ func _on_area_exited(area: Area2D) -> void:
 		enemies_in_range.erase(area.owner)
 		enemy_exited.emit(area.owner)
 
-func get_closest_target(_global_pos: Vector2) -> Node2D:
+func get_closest_target(_global_pos: Vector2, prioritize_fast: bool = false) -> Node2D:
 	if enemies_in_range.is_empty(): return null
 		
 	var best_enemy: Node2D = null
-	var highest_progress: float = -1.0
+	var highest_score: float = -1.0
 	
 	for enemy in enemies_in_range:
 		if is_instance_valid(enemy):
 			if "progress" in enemy:
-				if enemy.progress > highest_progress:
-					highest_progress = enemy.progress
+				var score = enemy.progress
+				if prioritize_fast and "speed" in enemy.data:
+					score += enemy.data.speed * 10.0 # Dá peso enorme para velocidade
+				if score > highest_score:
+					highest_score = score
 					best_enemy = enemy
 				
 	return best_enemy

@@ -89,6 +89,8 @@ func _update_stats() -> void:
 	queue_redraw()
 	_find_valid_path_points()
 
+var attacks_count = 0
+
 func _on_attack_timer_timeout() -> void:
 	if not data or not projectile_scene or not targeting_component: return
 	
@@ -99,18 +101,67 @@ func _on_attack_timer_timeout() -> void:
 		_spawn_trap_randomly()
 		return
 		
-	var target = targeting_component.get_closest_target(global_position)
+	if data.tower_name == "Esqueleto (Básico)" and GameManager.has_skill("esqueleto_chuva"):
+		attacks_count += 1
+		if attacks_count >= 5:
+			attacks_count = 0
+			_fire_spiral()
+			return
+			
+	var prioritize = (data.tower_name == "Esqueleto (Básico)" and GameManager.has_skill("esqueleto_mirada_alta"))
+	var target = targeting_component.get_closest_target(global_position, prioritize)
 	if target: _shoot(target)
+
+func _fire_spiral() -> void:
+	var count = randi_range(4, 6)
+	for i in range(count):
+		var angle = (float(i) / count) * TAU
+		var dir = Vector2.RIGHT.rotated(angle)
+		var proj = projectile_scene.instantiate()
+		get_tree().current_scene.add_child(proj) 
+		proj.global_position = global_position
+		
+		# Projéteis em espiral não seguem um alvo específico, então passamos o alvo nulo 
+		# mas precisamos alterar o projétil para lidar com isso ou dar um alvo falso.
+		# O ideal é achar o inimigo mais próximo naquela direção, ou disparar em linha reta.
+		# Vamos pegar inimigos aleatórios para simular a espiral!
+		var enemies = targeting_component.enemies_in_range.filter(func(e): return is_instance_valid(e))
+		var tgt = enemies[i % enemies.size()] if enemies.size() > 0 else null
+		if tgt:
+			proj.setup(tgt, get_current_damage(), data.projectile_speed, data.color, data.effect_type, get_current_effect_value())
+		else:
+			proj.queue_free()
+
+func _fire_projectile(target: Node2D) -> void:
+	var proj = projectile_scene.instantiate()
+	get_tree().current_scene.add_child(proj) 
+	proj.global_position = global_position
+	
+	var eff = data.effect_type
+	var eff_val = get_current_effect_value()
+	
+	if data.tower_name == "Esqueleto (Básico)":
+		if GameManager.has_skill("esqueleto_estilhaco"): eff = "esqueleto_estilhaco"
+		if GameManager.has_skill("esqueleto_maldicao"): eff = "esqueleto_maldicao"
+		if GameManager.has_skill("esqueleto_perfurante"): eff = "esqueleto_perfurante"
+		
+	proj.setup(target, get_current_damage(), data.projectile_speed, data.color, eff, eff_val)
 
 func _shoot(target: Node2D) -> void:
 	if data.effect_type == "buff":
 		_apply_buff_to_towers()
 		return
 		
-	var proj = projectile_scene.instantiate()
-	get_tree().current_scene.add_child(proj) 
-	proj.global_position = global_position
-	proj.setup(target, get_current_damage(), data.projectile_speed, data.color, data.effect_type, get_current_effect_value())
+	_fire_projectile(target)
+	
+	if data.tower_name == "Esqueleto (Básico)" and GameManager.has_skill("esqueleto_arco_duplo"):
+		var enemies = targeting_component.enemies_in_range.filter(func(e): return is_instance_valid(e))
+		if enemies.size() > 1:
+			var second = enemies[0] if enemies[0] != target else enemies[1]
+			_fire_projectile(second)
+		else:
+			_fire_projectile(target)
+
 
 func _on_enemy_entered_aura(enemy: Node2D) -> void:
 	if enemy.has_method("add_slow"):

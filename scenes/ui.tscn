@@ -178,10 +178,10 @@ visible = false
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -131.0
-offset_top = 183.0
-offset_right = -7.0
-offset_bottom = 276.0
+offset_left = -192.0
+offset_top = 160.0
+offset_right = -68.0
+offset_bottom = 253.0
 grow_horizontal = 0
 
 [node name="StatsLabel" type="Label" parent="UpgradeBar" unique_id=1215019884]
@@ -231,13 +231,13 @@ layout_mode = 2
 theme_override_font_sizes/font_size = 24
 text = "Reiniciar"
 
-[node name="BtnSkillTree" type="Button" parent="."]
+[node name="BtnSkillTree" type="Button" parent="." unique_id=260172764]
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = -60.0
-offset_right = 170.0
-offset_bottom = -20.0
+offset_left = 1056.0
+offset_top = -460.0
+offset_right = 1235.0
+offset_bottom = -420.0
 grow_vertical = 0
 text = "Árvore de Habilidades"

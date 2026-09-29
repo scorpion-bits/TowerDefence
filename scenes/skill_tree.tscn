@@ -1,7 +1,66 @@
 [gd_scene format=3 uid="uid://ddyxbwkvuvwxy"]
 
 [ext_resource type="Script" uid="uid://c5hn5fhjmsppv" path="res://scripts/UI/skill_tree.gd" id="1_st"]
+[ext_resource type="Texture2D" uid="uid://6vxrv427y07y" path="res://assets/arvore de habilidades.png" id="2_a302t"]
 [ext_resource type="PackedScene" uid="uid://cx1g01b3" path="res://scenes/skill_node.tscn" id="2_sn"]
+[ext_resource type="Texture2D" uid="uid://b570sqhhhppof" path="res://assets/mini botões.png" id="4_tyjg3"]
+[ext_resource type="Texture2D" uid="uid://co3ymtkbcomla" path="res://assets/botoes ups.png" id="5_51bdh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_urm3n"]
+atlas = ExtResource("2_a302t")
+region = Rect2(67, 31, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lnxdn"]
+atlas = ExtResource("4_tyjg3")
+region = Rect2(20, 1, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hkher"]
+atlas = ExtResource("5_51bdh")
+region = Rect2(5, 5, 9, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_81yc1"]
+atlas = ExtResource("4_tyjg3")
+region = Rect2(2, 1, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wa0ai"]
+atlas = ExtResource("5_51bdh")
+region = Rect2(16, 5, 9, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pk0co"]
+atlas = ExtResource("4_tyjg3")
+region = Rect2(11, 1, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ulbj6"]
+atlas = ExtResource("5_51bdh")
+region = Rect2(27, 5, 9, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dvtuv"]
+atlas = ExtResource("2_a302t")
+region = Rect2(34, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xvf33"]
+atlas = ExtResource("2_a302t")
+region = Rect2(49, 31, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_svhir"]
+atlas = ExtResource("2_a302t")
+region = Rect2(67, 79, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uiv75"]
+atlas = ExtResource("2_a302t")
+region = Rect2(49, 79, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2icyy"]
+atlas = ExtResource("2_a302t")
+region = Rect2(82, 46, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_elhmr"]
+atlas = ExtResource("2_a302t")
+region = Rect2(34, 46, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_whsey"]
+atlas = ExtResource("2_a302t")
+region = Rect2(82, 64, 16, 16)
 
 [node name="SkillTree" type="CanvasLayer" unique_id=852794173]
 process_mode = 3
@@ -16,6 +75,14 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.05, 0.05, 0.05, 0.95)
 
+[node name="TextureRect" type="TextureRect" parent="." unique_id=1854841901]
+visible = false
+offset_left = 316.0
+offset_top = 33.0
+offset_right = 947.4872
+offset_bottom = 597.0
+texture = ExtResource("2_a302t")
+
 [node name="TreeContainer" type="Control" parent="." unique_id=342024400]
 layout_mode = 3
 anchors_preset = 8
@@ -23,40 +90,333 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
+offset_left = 1.0
+offset_top = 20.0
+offset_right = 1.0
+offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="BaseStart" parent="TreeContainer" unique_id=685491707 instance=ExtResource("2_sn")]
-layout_mode = 0
-offset_left = -419.0
-offset_top = -157.0
-offset_right = -371.0
-offset_bottom = -109.0
-skill_id = "base_start"
+[node name="Esqueleto" type="Control" parent="TreeContainer" unique_id=1208943066]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="SkelDmg1" parent="TreeContainer" unique_id=1828554228 instance=ExtResource("2_sn")]
-layout_mode = 0
-offset_left = -340.0
-offset_top = -269.0
-offset_right = -278.0
-offset_bottom = -221.0
-skill_id = "skel_dmg_1"
+[node name="Node_Esqueleto" parent="TreeContainer/Esqueleto" unique_id=645397718 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -13.0
+offset_top = -218.0
+offset_right = 67.0
+offset_bottom = -138.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = SubResource("AtlasTexture_urm3n")
+skill_id = "esqueleto_base"
 
-[node name="SkelSpd1" parent="TreeContainer" unique_id=860993284 instance=ExtResource("2_sn")]
-layout_mode = 0
-offset_left = -232.0
-offset_top = -260.0
-offset_right = -177.0
-offset_bottom = -212.0
-skill_id = "skel_spd_1"
+[node name="esqueleto_range_1" parent="TreeContainer/Esqueleto" unique_id=900224745 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 35.0
+offset_top = -250.0
+offset_right = 115.0
+offset_bottom = -170.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_lnxdn")
+skill_id = "esqueleto_range_1"
 
-[node name="FireDmg1" parent="TreeContainer" unique_id=269325410 instance=ExtResource("2_sn")]
-layout_mode = 0
-offset_left = -129.0
-offset_top = -238.0
-offset_right = -67.0
-offset_bottom = -190.0
-skill_id = "fire_dmg_1"
+[node name="esqueleto_mirada_alta" parent="TreeContainer/Esqueleto" unique_id=1541619223 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 59.0
+offset_top = -274.0
+offset_right = 139.0
+offset_bottom = -194.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_lnxdn")
+skill_id = "esqueleto_mirada_alta"
+
+[node name="esqueleto_chuva" parent="TreeContainer/Esqueleto" unique_id=1396204313 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 139.0
+offset_top = -250.00002
+offset_right = 219.0
+offset_bottom = -170.00002
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_hkher")
+skill_id = "esqueleto_chuva"
+
+[node name="esqueleto_damage_1" parent="TreeContainer/Esqueleto" unique_id=368102278 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 67.0
+offset_top = -234.0
+offset_right = 147.0
+offset_bottom = -154.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_81yc1")
+skill_id = "esqueleto_damage_1"
+
+[node name="esqueleto_estilhaco" parent="TreeContainer/Esqueleto" unique_id=176712749 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 91.0
+offset_top = -258.0
+offset_right = 171.0
+offset_bottom = -178.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_81yc1")
+skill_id = "esqueleto_estilhaco"
+
+[node name="esqueleto_maldicao" parent="TreeContainer/Esqueleto" unique_id=744784242 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 115.0
+offset_top = -290.0
+offset_right = 195.0
+offset_bottom = -210.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_wa0ai")
+skill_id = "esqueleto_maldicao"
+
+[node name="esqueleto_spd_1" parent="TreeContainer/Esqueleto" unique_id=1713583428 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 75.0
+offset_top = -202.0
+offset_right = 155.0
+offset_bottom = -122.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_pk0co")
+skill_id = "esqueleto_spd_1"
+
+[node name="esqueleto_arco_duplo" parent="TreeContainer/Esqueleto" unique_id=533275136 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 107.0
+offset_top = -226.0
+offset_right = 187.0
+offset_bottom = -146.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_pk0co")
+skill_id = "esqueleto_arco_duplo"
+
+[node name="esqueleto_perfurante" parent="TreeContainer/Esqueleto" unique_id=1737331727 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 75.00001
+offset_top = -314.0
+offset_right = 155.0
+offset_bottom = -234.00002
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_ulbj6")
+skill_id = "esqueleto_perfurante"
+
+[node name="Fogo" type="Control" parent="TreeContainer" unique_id=1481046112]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Node_Fogo" parent="TreeContainer/Fogo" unique_id=431275952 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -189.0
+offset_top = -42.0
+offset_right = -109.0
+offset_bottom = 38.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = SubResource("AtlasTexture_dvtuv")
+skill_id = "fogo_base"
+
+[node name="Sapo" type="Control" parent="TreeContainer" unique_id=1235238853]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Node_Sapo" parent="TreeContainer/Sapo" unique_id=310086229 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -109.0
+offset_top = -218.0
+offset_right = -29.0
+offset_bottom = -138.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = SubResource("AtlasTexture_xvf33")
+skill_id = "sapo_base"
+
+[node name="Olho" type="Control" parent="TreeContainer" unique_id=92883963]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Node_Olho" parent="TreeContainer/Olho" unique_id=1464795071 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -13.0
+offset_top = 22.0
+offset_right = 67.0
+offset_bottom = 102.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = SubResource("AtlasTexture_svhir")
+skill_id = "olho_base"
+
+[node name="Pedra" type="Control" parent="TreeContainer" unique_id=781875501]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Node_Pedra" parent="TreeContainer/Pedra" unique_id=21738796 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -109.0
+offset_top = 22.0
+offset_right = -29.0
+offset_bottom = 102.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = SubResource("AtlasTexture_uiv75")
+skill_id = "pedra_base"
+
+[node name="Espantalho" type="Control" parent="TreeContainer" unique_id=1265624123]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Node_Espantalho" parent="TreeContainer/Espantalho" unique_id=1663818447 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 67.0
+offset_top = -146.0
+offset_right = 147.0
+offset_bottom = -66.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = SubResource("AtlasTexture_2icyy")
+skill_id = "espantalho_base"
+
+[node name="Gelo" type="Control" parent="TreeContainer" unique_id=185604951]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Node_Gelo" parent="TreeContainer/Gelo" unique_id=1604805575 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -189.0
+offset_top = -146.0
+offset_right = -109.0
+offset_bottom = -66.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = SubResource("AtlasTexture_elhmr")
+skill_id = "gelo_base"
+
+[node name="Planta" type="Control" parent="TreeContainer" unique_id=1907125596]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Node_Planta" parent="TreeContainer/Planta" unique_id=991396416 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 67.0
+offset_top = -42.0
+offset_right = 147.0
+offset_bottom = 38.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = SubResource("AtlasTexture_whsey")
+skill_id = "planta_base"
 
 [node name="TopPanel" type="Panel" parent="." unique_id=1597543385]
 anchors_preset = 10

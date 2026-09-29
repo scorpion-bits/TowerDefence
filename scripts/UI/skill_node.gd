@@ -21,7 +21,7 @@ func _on_points_changed(_pts: int) -> void:
 
 func _update_state() -> void:
 	if not GameManager.skill_tree_data.has(skill_id):
-		text = "?"
+		tooltip_text = "?"
 		return
 		
 	var data = GameManager.skill_tree_data[skill_id]
@@ -33,6 +33,13 @@ func _update_state() -> void:
 		if not GameManager.unlocked_skills.has(req):
 			reqs_met = false
 			break
+			
+	if data.has("exclusive_group") and not is_unlocked and reqs_met:
+		for other_id in GameManager.unlocked_skills:
+			var other_data = GameManager.skill_tree_data.get(other_id)
+			if other_data and other_data.has("exclusive_group") and other_data.exclusive_group == data.exclusive_group:
+				reqs_met = false
+				break
 			
 	can_unlock = not is_unlocked and reqs_met and GameManager.skill_points >= GameManager.get_next_skill_cost()
 	
@@ -54,9 +61,13 @@ func _update_state() -> void:
 	]
 	
 	# Update tree drawing
-	var parent = get_parent()
-	if parent and parent.has_method("queue_redraw"):
-		parent.queue_redraw()
+	var p = get_parent()
+	while p != null:
+		if p.name == "TreeContainer" and p.has_method("queue_redraw"):
+			p.queue_redraw()
+			break
+		p = p.get_parent()
+
 
 func _on_pressed() -> void:
 	if can_unlock:
