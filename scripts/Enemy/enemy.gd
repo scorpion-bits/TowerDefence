@@ -62,9 +62,7 @@ func _process(delta: float) -> void:
 			
 			if poison_stacks[i].tick_timer <= 0.0:
 				poison_stacks[i].tick_timer = 1.0
-				var dmg = poison_stacks[i].dmg
-				if GameManager.has_skill("planta_dano_1"): dmg *= 1.15
-				if GameManager.has_skill("planta_acido"): dmg += health_component.max_health * 0.015
+				var dmg = _get_poison_tick_damage(poison_stacks[i].dmg)
 				health_component.take_damage(int(dmg))
 				
 			if poison_stacks[i].time <= 0.0:
@@ -146,10 +144,19 @@ func apply_burn(dmg: int, duration: float) -> void:
 	if burn_tick_timer <= 0:
 		burn_tick_timer = 1.0
 
+# A fórmula do dano por tique de veneno (base + bônus de planta_dano_1/planta_acido) é
+# compartilhada entre o tique normal, a necrose (estouro ao atingir o limite de pilhas)
+# e a epidemia (espalhar ao morrer), para não ficar reimplementada em 3 lugares.
+func _get_poison_tick_damage(base_dmg: float) -> float:
+	var dmg = base_dmg
+	if GameManager.has_skill("planta_dano_1"): dmg *= 1.15
+	if GameManager.has_skill("planta_acido"): dmg += health_component.max_health * 0.015
+	return dmg
+
 func apply_poison(dmg: float, duration: float) -> void:
 	if GameManager.has_skill("planta_stack_1"):
 		duration += 3.0
-		
+
 	var max_stacks = 3 if GameManager.has_skill("planta_stack_1") else 1
 
 	if poison_stacks.size() >= max_stacks:
@@ -157,10 +164,7 @@ func apply_poison(dmg: float, duration: float) -> void:
 			var total_dmg = 0.0
 			for stack in poison_stacks:
 				var ticks_left = max(1, int(stack.time))
-				var s_dmg = stack.dmg
-				if GameManager.has_skill("planta_dano_1"): s_dmg *= 1.15
-				if GameManager.has_skill("planta_acido"): s_dmg += health_component.max_health * 0.015
-				total_dmg += s_dmg * ticks_left
+				total_dmg += _get_poison_tick_damage(stack.dmg) * ticks_left
 			poison_stacks.clear()
 			if has_meta("neuro_slow"):
 				remove_meta("neuro_slow")
@@ -197,10 +201,7 @@ func _on_died() -> void:
 		var total_dmg = 0.0
 		for stack in poison_stacks:
 			var ticks_left = max(1, int(stack.time))
-			var dmg = stack.dmg
-			if GameManager.has_skill("planta_dano_1"): dmg *= 1.15
-			if GameManager.has_skill("planta_acido"): dmg += health_component.max_health * 0.015
-			total_dmg += dmg * ticks_left
+			total_dmg += _get_poison_tick_damage(stack.dmg) * ticks_left
 			
 		var enemies = get_tree().get_nodes_in_group("enemies")
 		for e in enemies:

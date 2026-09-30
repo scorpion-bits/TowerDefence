@@ -54,73 +54,92 @@ func _get_valid_enemies(exclude: Array = []) -> Array:
 var spore_timer: float = 0.0
 
 func _process(delta: float) -> void:
-	if data and data.tower_name == "Espantalho (Buff)" and GameManager.has_skill("espantalho_frenesi"):
-		frenzy_timer += delta
-		if frenzy_timer >= 20.0:
-			frenzy_active = true
-			frenzy_timer = 0.0
-			_update_towers_in_range_stats()
-			get_tree().create_timer(5.0).timeout.connect(func():
-				frenzy_active = false
-				if is_instance_valid(self): _update_towers_in_range_stats()
-			)
-			
-	if data and data.tower_name == "Planta Peçonhenta" and GameManager.has_skill("planta_esporos"):
-		spore_timer += delta
-		if spore_timer >= 15.0:
-			spore_timer = 0.0
-			_spawn_spore_cloud()
-			
-	if data and data.effect_type == "laser":
-		laser_targets.clear()
-		laser_chain_lines.clear()
-		
-		# Valida o target atual
-		if is_instance_valid(current_target) and current_target.global_position.distance_to(global_position) <= get_current_range() and current_target.progress_ratio < 1.0:
-			if laser_lock_timer > 0:
-				laser_lock_timer -= delta
-			else:
-				if GameManager.has_skill("olho_calor_1"):
-					laser_heat_timer += delta
-					if laser_heat_timer >= 1.0 and laser_heat_stacks < 4:
-						laser_heat_stacks += 1
-						laser_heat_timer -= 1.0
-				
-				laser_targets.append(current_target)
-				
-				if GameManager.has_skill("olho_bifurcado"):
-					var enemies = _get_valid_enemies([current_target])
-					if enemies.size() > 0:
-						laser_targets.append(enemies[0])
+	if not data: return
 
-				if GameManager.has_skill("olho_cadeia"):
-					var exclude = laser_targets.duplicate()
-					for t in laser_targets:
-						var ricochet = 2
-						var enemies = _get_valid_enemies(exclude)
-						for i in range(min(ricochet, enemies.size())):
-							laser_chain_lines.append([t, enemies[i]])
-							exclude.append(enemies[i])
+	if data.tower_name == "Espantalho (Buff)":
+		_process_espantalho_frenzy(delta)
+
+	if data.tower_name == "Planta Peçonhenta":
+		_process_planta_esporos(delta)
+
+	if data.effect_type == "laser":
+		_process_olho_laser_targeting(delta)
+
+# --- ESPANTALHO (BUFF) ---
+
+func _process_espantalho_frenzy(delta: float) -> void:
+	if not GameManager.has_skill("espantalho_frenesi"): return
+	frenzy_timer += delta
+	if frenzy_timer >= 20.0:
+		frenzy_active = true
+		frenzy_timer = 0.0
+		_update_towers_in_range_stats()
+		get_tree().create_timer(5.0).timeout.connect(func():
+			frenzy_active = false
+			if is_instance_valid(self): _update_towers_in_range_stats()
+		)
+
+# --- PLANTA PEÇONHENTA ---
+
+func _process_planta_esporos(delta: float) -> void:
+	if not GameManager.has_skill("planta_esporos"): return
+	spore_timer += delta
+	if spore_timer >= 15.0:
+		spore_timer = 0.0
+		_spawn_spore_cloud()
+
+# --- OLHO FLUTUANTE (LASER) ---
+
+func _process_olho_laser_targeting(delta: float) -> void:
+	laser_targets.clear()
+	laser_chain_lines.clear()
+
+	# Valida o target atual
+	if is_instance_valid(current_target) and current_target.global_position.distance_to(global_position) <= get_current_range() and current_target.progress_ratio < 1.0:
+		if laser_lock_timer > 0:
+			laser_lock_timer -= delta
 		else:
-			# Busca novo target
-			var had_target = is_instance_valid(current_target)
-			var new_target = targeting_component.get_closest_target(global_position)
-			current_target = new_target
-			laser_heat_stacks = 0
-			laser_heat_timer = 0.0
-			if new_target:
-				# A trava de mira (delay) so se aplica quando a torre estava sem alvo nenhum.
-				# Se estavamos trocando de um alvo que acabou de sair do alcance, o novo alvo
-				# e engajado imediatamente para evitar que alvos aglomerados resetem a mira
-				# indefinidamente e a torre fique sem atacar.
-				if not had_target and not GameManager.has_skill("olho_instant"):
-					laser_lock_timer = 0.3
-				else:
-					laser_lock_timer = 0.0
+			if GameManager.has_skill("olho_calor_1"):
+				laser_heat_timer += delta
+				if laser_heat_timer >= 1.0 and laser_heat_stacks < 4:
+					laser_heat_stacks += 1
+					laser_heat_timer -= 1.0
+
+			laser_targets.append(current_target)
+
+			if GameManager.has_skill("olho_bifurcado"):
+				var enemies = _get_valid_enemies([current_target])
+				if enemies.size() > 0:
+					laser_targets.append(enemies[0])
+
+			if GameManager.has_skill("olho_cadeia"):
+				var exclude = laser_targets.duplicate()
+				for t in laser_targets:
+					var ricochet = 2
+					var enemies = _get_valid_enemies(exclude)
+					for i in range(min(ricochet, enemies.size())):
+						laser_chain_lines.append([t, enemies[i]])
+						exclude.append(enemies[i])
+	else:
+		# Busca novo target
+		var had_target = is_instance_valid(current_target)
+		var new_target = targeting_component.get_closest_target(global_position)
+		current_target = new_target
+		laser_heat_stacks = 0
+		laser_heat_timer = 0.0
+		if new_target:
+			# A trava de mira (delay) so se aplica quando a torre estava sem alvo nenhum.
+			# Se estavamos trocando de um alvo que acabou de sair do alcance, o novo alvo
+			# e engajado imediatamente para evitar que alvos aglomerados resetem a mira
+			# indefinidamente e a torre fique sem atacar.
+			if not had_target and not GameManager.has_skill("olho_instant"):
+				laser_lock_timer = 0.3
 			else:
 				laser_lock_timer = 0.0
-				
-		queue_redraw()
+		else:
+			laser_lock_timer = 0.0
+
+	queue_redraw()
 
 func _update_towers_in_range_stats() -> void:
 	var towers = get_tree().get_nodes_in_group("towers")
@@ -342,16 +361,39 @@ func _on_attack_timer_timeout() -> void:
 		_spawn_trap_randomly()
 		return
 		
-	if data.tower_name == "Esqueleto (Básico)" and GameManager.has_skill("esqueleto_chuva"):
-		attacks_count += 1
-		if attacks_count >= 5:
-			attacks_count = 0
-			_fire_spiral()
-			return
-			
+	if data.tower_name == "Esqueleto (Básico)" and _esqueleto_try_fire_spiral():
+		return
+
 	var prioritize = (data.tower_name == "Esqueleto (Básico)" and GameManager.has_skill("esqueleto_mirada_alta"))
 	var target = targeting_component.get_closest_target(global_position, prioritize)
 	if target: _shoot(target)
+
+# --- ESQUELETO (BÁSICO) ---
+
+func _esqueleto_try_fire_spiral() -> bool:
+	if not GameManager.has_skill("esqueleto_chuva"): return false
+	attacks_count += 1
+	if attacks_count >= 5:
+		attacks_count = 0
+		_fire_spiral()
+		return true
+	return false
+
+func _esqueleto_projectile_effect(default_effect: String) -> String:
+	var eff = default_effect
+	if GameManager.has_skill("esqueleto_estilhaco"): eff = "esqueleto_estilhaco"
+	if GameManager.has_skill("esqueleto_maldicao"): eff = "esqueleto_maldicao"
+	if GameManager.has_skill("esqueleto_perfurante"): eff = "esqueleto_perfurante"
+	return eff
+
+func _esqueleto_maybe_fire_second_shot(target: Node2D) -> void:
+	if not GameManager.has_skill("esqueleto_arco_duplo"): return
+	var enemies = _get_valid_enemies()
+	if enemies.size() > 1:
+		var second = enemies[0] if enemies[0] != target else enemies[1]
+		_fire_projectile(second)
+	else:
+		_fire_projectile(target)
 
 func _fire_spiral() -> void:
 	var count = randi_range(4, 6)
@@ -380,12 +422,10 @@ func _fire_projectile(target: Node2D) -> void:
 	
 	var eff = data.effect_type
 	var eff_val = get_current_effect_value()
-	
+
 	if data.tower_name == "Esqueleto (Básico)":
-		if GameManager.has_skill("esqueleto_estilhaco"): eff = "esqueleto_estilhaco"
-		if GameManager.has_skill("esqueleto_maldicao"): eff = "esqueleto_maldicao"
-		if GameManager.has_skill("esqueleto_perfurante"): eff = "esqueleto_perfurante"
-		
+		eff = _esqueleto_projectile_effect(eff)
+
 	var dmg = get_current_damage()
 	if randf() < get_crit_chance():
 		dmg = int(dmg * 2.0)
@@ -400,14 +440,9 @@ func _shoot(target: Node2D) -> void:
 		return
 		
 	_fire_projectile(target)
-	
-	if data.tower_name == "Esqueleto (Básico)" and GameManager.has_skill("esqueleto_arco_duplo"):
-		var enemies = _get_valid_enemies()
-		if enemies.size() > 1:
-			var second = enemies[0] if enemies[0] != target else enemies[1]
-			_fire_projectile(second)
-		else:
-			_fire_projectile(target)
+
+	if data.tower_name == "Esqueleto (Básico)":
+		_esqueleto_maybe_fire_second_shot(target)
 
 
 func _on_enemy_entered_aura(enemy: Node2D) -> void:
@@ -495,7 +530,9 @@ func _on_trap_area_entered(area: Area2D, trap: Area2D) -> void:
 			if area.owner.has_method("apply_poison"):
 				area.owner.apply_poison(get_current_damage(), 3.0)
 			trap.hide()
-			trap.monitoring = false
+			# set_deferred: mudar "monitoring" direto aqui é bloqueado pelo Godot porque
+			# estamos dentro do próprio sinal area_entered da trap (in/out signal).
+			trap.set_deferred("monitoring", false)
 		elif e_type == "fire_path":
 			if area.owner.has_method("apply_burn"):
 				area.owner.apply_burn(get_current_damage(), 3.0)
