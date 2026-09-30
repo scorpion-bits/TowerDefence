@@ -5,6 +5,9 @@
 [ext_resource type="PackedScene" uid="uid://cx1g01b3" path="res://scenes/skill_node.tscn" id="2_sn"]
 [ext_resource type="Texture2D" uid="uid://b570sqhhhppof" path="res://assets/mini botões.png" id="4_tyjg3"]
 [ext_resource type="Texture2D" uid="uid://co3ymtkbcomla" path="res://assets/botoes ups.png" id="5_51bdh"]
+[ext_resource type="Texture2D" uid="uid://duw8e662mlwx8" path="res://assets/Botões espantalho/botoes.png" id="6_6awrb"]
+[ext_resource type="Texture2D" uid="uid://dtje1831eoc87" path="res://assets/botões planta/botoes.png" id="7_h52vt"]
+[ext_resource type="Texture2D" uid="uid://b5py4oubwo4ys" path="res://assets/Botões olho/botões.png" id="8_003p6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_urm3n"]
 atlas = ExtResource("2_a302t")
@@ -34,6 +37,134 @@ region = Rect2(11, 1, 7, 7)
 atlas = ExtResource("5_51bdh")
 region = Rect2(27, 5, 9, 9)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_2icyy"]
+atlas = ExtResource("2_a302t")
+region = Rect2(82, 46, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_51bdh"]
+atlas = ExtResource("6_6awrb")
+region = Rect2(4, 2, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6awrb"]
+atlas = ExtResource("6_6awrb")
+region = Rect2(13, 2, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_h52vt"]
+atlas = ExtResource("6_6awrb")
+region = Rect2(22, 2, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_003p6"]
+atlas = ExtResource("6_6awrb")
+region = Rect2(4, 11, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hwd2a"]
+atlas = ExtResource("6_6awrb")
+region = Rect2(13, 11, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bfm8x"]
+atlas = ExtResource("6_6awrb")
+region = Rect2(22, 11, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rh3y1"]
+atlas = ExtResource("6_6awrb")
+region = Rect2(2, 22, 9, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0rm1"]
+atlas = ExtResource("6_6awrb")
+region = Rect2(12, 22, 9, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p21vy"]
+atlas = ExtResource("6_6awrb")
+region = Rect2(22, 22, 9, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_whsey"]
+atlas = ExtResource("2_a302t")
+region = Rect2(82, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nfiw7"]
+atlas = ExtResource("7_h52vt")
+region = Rect2(2, 1, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k1uwy"]
+atlas = ExtResource("7_h52vt")
+region = Rect2(2, 10, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kifll"]
+atlas = ExtResource("7_h52vt")
+region = Rect2(20, 1, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1nvn7"]
+atlas = ExtResource("7_h52vt")
+region = Rect2(11, 1, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rad5e"]
+atlas = ExtResource("7_h52vt")
+region = Rect2(11, 10, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a025n"]
+atlas = ExtResource("7_h52vt")
+region = Rect2(20, 10, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_phjyi"]
+atlas = ExtResource("7_h52vt")
+region = Rect2(0, 21, 9, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uw2dm"]
+atlas = ExtResource("7_h52vt")
+region = Rect2(10, 21, 9, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u6rwh"]
+atlas = ExtResource("7_h52vt")
+region = Rect2(20, 21, 9, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_svhir"]
+atlas = ExtResource("2_a302t")
+region = Rect2(67, 79, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qredw"]
+atlas = ExtResource("8_003p6")
+region = Rect2(4, 2, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jrpp7"]
+atlas = ExtResource("8_003p6")
+region = Rect2(4, 11, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2gejb"]
+atlas = ExtResource("8_003p6")
+region = Rect2(13, 2, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_o5b3c"]
+atlas = ExtResource("8_003p6")
+region = Rect2(22, 2, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mxcng"]
+atlas = ExtResource("8_003p6")
+region = Rect2(22, 11, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_66wtt"]
+atlas = ExtResource("8_003p6")
+region = Rect2(13, 11, 7, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xlgbs"]
+atlas = ExtResource("8_003p6")
+region = Rect2(2, 22, 9, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5cnif"]
+atlas = ExtResource("8_003p6")
+region = Rect2(22, 22, 9, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vnw36"]
+atlas = ExtResource("8_003p6")
+region = Rect2(12, 22, 9, 9)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uiv75"]
+atlas = ExtResource("2_a302t")
+region = Rect2(49, 79, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_elhmr"]
+atlas = ExtResource("2_a302t")
+region = Rect2(34, 46, 16, 16)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_dvtuv"]
 atlas = ExtResource("2_a302t")
 region = Rect2(34, 64, 16, 16)
@@ -41,26 +172,6 @@ region = Rect2(34, 64, 16, 16)
 [sub_resource type="AtlasTexture" id="AtlasTexture_xvf33"]
 atlas = ExtResource("2_a302t")
 region = Rect2(49, 31, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_svhir"]
-atlas = ExtResource("2_a302t")
-region = Rect2(67, 79, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_uiv75"]
-atlas = ExtResource("2_a302t")
-region = Rect2(49, 79, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_2icyy"]
-atlas = ExtResource("2_a302t")
-region = Rect2(82, 46, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_elhmr"]
-atlas = ExtResource("2_a302t")
-region = Rect2(34, 46, 16, 16)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_whsey"]
-atlas = ExtResource("2_a302t")
-region = Rect2(82, 64, 16, 16)
 
 [node name="SkillTree" type="CanvasLayer" unique_id=852794173]
 process_mode = 3
@@ -71,6 +182,10 @@ script = ExtResource("1_st")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = 4.0
+offset_right = -2.0
+offset_bottom = 4.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.05, 0.05, 0.05, 0.95)
@@ -271,6 +386,570 @@ scale = Vector2(0.4, 0.4)
 texture_normal = SubResource("AtlasTexture_ulbj6")
 skill_id = "esqueleto_perfurante"
 
+[node name="Espantalho" type="Control" parent="TreeContainer" unique_id=1265624123]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Node_Espantalho" parent="TreeContainer/Espantalho" unique_id=1663818447 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 67.0
+offset_top = -146.0
+offset_right = 147.0
+offset_bottom = -66.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = SubResource("AtlasTexture_2icyy")
+skill_id = "espantalho_base"
+
+[node name="espantalho_dano_1" parent="TreeContainer/Espantalho" unique_id=288354178 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 138.0
+offset_top = -166.0
+offset_right = 218.0
+offset_bottom = -86.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_51bdh")
+skill_id = "espantalho_dano_1"
+
+[node name="espantalho_spd_1" parent="TreeContainer/Espantalho" unique_id=2049954851 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 170.0
+offset_top = -179.0
+offset_right = 250.0
+offset_bottom = -99.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_6awrb")
+skill_id = "espantalho_spd_1"
+
+[node name="espantalho_frenesi" parent="TreeContainer/Espantalho" unique_id=693787331 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 199.0
+offset_top = -205.0
+offset_right = 279.0
+offset_bottom = -125.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_h52vt")
+skill_id = "espantalho_frenesi"
+
+[node name="espantalho_slow_1" parent="TreeContainer/Espantalho" unique_id=992097653 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 158.0
+offset_top = -138.0
+offset_right = 238.0
+offset_bottom = -58.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_003p6")
+skill_id = "espantalho_slow_1"
+
+[node name="espantalho_xp_1" parent="TreeContainer/Espantalho" unique_id=364319334 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 190.0
+offset_top = -146.0
+offset_right = 270.0
+offset_bottom = -66.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_hwd2a")
+skill_id = "espantalho_xp_1"
+
+[node name="espantalho_panico" parent="TreeContainer/Espantalho" unique_id=991323821 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 231.0
+offset_top = -164.0
+offset_right = 311.0
+offset_bottom = -84.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_bfm8x")
+skill_id = "espantalho_panico"
+
+[node name="espantalho_range_1" parent="TreeContainer/Espantalho" unique_id=1479400437 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 156.0
+offset_top = -104.0
+offset_right = 236.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_rh3y1")
+skill_id = "espantalho_range_1"
+
+[node name="espantalho_range_buff" parent="TreeContainer/Espantalho" unique_id=1463075624 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 194.0
+offset_top = -108.0
+offset_right = 274.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_n0rm1")
+skill_id = "espantalho_range_buff"
+
+[node name="espantalho_sinergia" parent="TreeContainer/Espantalho" unique_id=2062500311 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 230.0
+offset_top = -110.0
+offset_right = 310.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_p21vy")
+skill_id = "espantalho_sinergia"
+
+[node name="Planta" type="Control" parent="TreeContainer" unique_id=1907125596]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Node_Planta" parent="TreeContainer/Planta" unique_id=991396416 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 67.0
+offset_top = -42.0
+offset_right = 147.0
+offset_bottom = 38.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = SubResource("AtlasTexture_whsey")
+skill_id = "planta_base"
+
+[node name="planta_dano_1" parent="TreeContainer/Planta" unique_id=796770599 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 155.0
+offset_top = -38.0
+offset_right = 235.0
+offset_bottom = 42.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_nfiw7")
+skill_id = "planta_dano_1"
+
+[node name="planta_stack_1" parent="TreeContainer/Planta" unique_id=1367368217 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 197.0
+offset_top = -37.0
+offset_right = 277.0
+offset_bottom = 43.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_k1uwy")
+skill_id = "planta_stack_1"
+
+[node name="planta_range_1" parent="TreeContainer/Planta" unique_id=567813589 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 151.0
+offset_top = 28.0
+offset_right = 231.0
+offset_bottom = 108.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_kifll")
+skill_id = "planta_range_1"
+
+[node name="planta_spd_1" parent="TreeContainer/Planta" unique_id=1938858721 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 160.0
+offset_top = -6.0
+offset_right = 240.0
+offset_bottom = 74.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_1nvn7")
+skill_id = "planta_spd_1"
+
+[node name="planta_esporos" parent="TreeContainer/Planta" unique_id=941986301 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 200.0
+offset_top = -2.0
+offset_right = 280.0
+offset_bottom = 78.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_rad5e")
+skill_id = "planta_esporos"
+
+[node name="planta_neuro" parent="TreeContainer/Planta" unique_id=59177643 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 193.0
+offset_top = 35.0
+offset_right = 273.0
+offset_bottom = 115.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_a025n")
+skill_id = "planta_neuro"
+
+[node name="planta_necrose" parent="TreeContainer/Planta" unique_id=1089504986 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 243.0
+offset_top = -47.0
+offset_right = 323.0
+offset_bottom = 33.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_phjyi")
+skill_id = "planta_necrose"
+
+[node name="planta_epidemia" parent="TreeContainer/Planta" unique_id=1811659590 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 249.0
+offset_top = 1.0
+offset_right = 329.0
+offset_bottom = 81.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_uw2dm")
+skill_id = "planta_epidemia"
+
+[node name="planta_acido" parent="TreeContainer/Planta" unique_id=649730193 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 232.0
+offset_top = 51.0
+offset_right = 312.0
+offset_bottom = 131.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_u6rwh")
+skill_id = "planta_acido"
+
+[node name="Olho" type="Control" parent="TreeContainer" unique_id=92883963]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Node_Olho" parent="TreeContainer/Olho" unique_id=1464795071 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -13.0
+offset_top = 22.0
+offset_right = 67.0
+offset_bottom = 102.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = SubResource("AtlasTexture_svhir")
+skill_id = "olho_base"
+
+[node name="olho_spd_1" parent="TreeContainer/Olho" unique_id=1440785574 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 74.0
+offset_top = 82.0
+offset_right = 154.0
+offset_bottom = 162.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_qredw")
+skill_id = "olho_spd_1"
+
+[node name="olho_calor_1" parent="TreeContainer/Olho" unique_id=1199162402 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 103.0
+offset_top = 108.0
+offset_right = 183.0
+offset_bottom = 188.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_jrpp7")
+skill_id = "olho_calor_1"
+
+[node name="olho_dano_1" parent="TreeContainer/Olho" unique_id=793313644 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 49.0
+offset_top = 104.0
+offset_right = 129.0
+offset_bottom = 184.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_2gejb")
+skill_id = "olho_dano_1"
+
+[node name="olho_range_1" parent="TreeContainer/Olho" unique_id=203408319 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_top = 118.0
+offset_right = 96.0
+offset_bottom = 198.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_o5b3c")
+skill_id = "olho_range_1"
+
+[node name="olho_instant" parent="TreeContainer/Olho" unique_id=1475732553 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 35.0
+offset_top = 151.0
+offset_right = 115.0
+offset_bottom = 231.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_mxcng")
+skill_id = "olho_instant"
+
+[node name="olho_bifurcado" parent="TreeContainer/Olho" unique_id=1582286673 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 75.0
+offset_top = 134.0
+offset_right = 155.0
+offset_bottom = 214.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_66wtt")
+skill_id = "olho_bifurcado"
+
+[node name="olho_fusao" parent="TreeContainer/Olho" unique_id=546256271 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 142.0
+offset_top = 120.0
+offset_right = 222.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_xlgbs")
+skill_id = "olho_fusao"
+
+[node name="olho_satelite" parent="TreeContainer/Olho" unique_id=448160001 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 48.0
+offset_top = 187.99998
+offset_right = 128.0
+offset_bottom = 268.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_5cnif")
+skill_id = "olho_satelite"
+
+[node name="olho_cadeia" parent="TreeContainer/Olho" unique_id=117644895 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 105.0
+offset_top = 164.99998
+offset_right = 185.0
+offset_bottom = 245.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_vnw36")
+skill_id = "olho_cadeia"
+
+[node name="Pedra" type="Control" parent="TreeContainer" unique_id=781875501]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Node_Pedra" parent="TreeContainer/Pedra" unique_id=21738796 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -109.0
+offset_top = 22.0
+offset_right = -29.0
+offset_bottom = 102.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = SubResource("AtlasTexture_uiv75")
+skill_id = "pedra_base"
+
+[node name="Gelo" type="Control" parent="TreeContainer" unique_id=185604951]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Node_Gelo" parent="TreeContainer/Gelo" unique_id=1604805575 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -189.0
+offset_top = -146.0
+offset_right = -109.0
+offset_bottom = -66.0
+grow_horizontal = 2
+grow_vertical = 2
+texture_normal = SubResource("AtlasTexture_elhmr")
+skill_id = "gelo_base"
+
 [node name="Fogo" type="Control" parent="TreeContainer" unique_id=1481046112]
 anchors_preset = 0
 offset_right = 40.0
@@ -313,111 +992,6 @@ grow_vertical = 2
 texture_normal = SubResource("AtlasTexture_xvf33")
 skill_id = "sapo_base"
 
-[node name="Olho" type="Control" parent="TreeContainer" unique_id=92883963]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Node_Olho" parent="TreeContainer/Olho" unique_id=1464795071 instance=ExtResource("2_sn")]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -13.0
-offset_top = 22.0
-offset_right = 67.0
-offset_bottom = 102.0
-grow_horizontal = 2
-grow_vertical = 2
-texture_normal = SubResource("AtlasTexture_svhir")
-skill_id = "olho_base"
-
-[node name="Pedra" type="Control" parent="TreeContainer" unique_id=781875501]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Node_Pedra" parent="TreeContainer/Pedra" unique_id=21738796 instance=ExtResource("2_sn")]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -109.0
-offset_top = 22.0
-offset_right = -29.0
-offset_bottom = 102.0
-grow_horizontal = 2
-grow_vertical = 2
-texture_normal = SubResource("AtlasTexture_uiv75")
-skill_id = "pedra_base"
-
-[node name="Espantalho" type="Control" parent="TreeContainer" unique_id=1265624123]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Node_Espantalho" parent="TreeContainer/Espantalho" unique_id=1663818447 instance=ExtResource("2_sn")]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 67.0
-offset_top = -146.0
-offset_right = 147.0
-offset_bottom = -66.0
-grow_horizontal = 2
-grow_vertical = 2
-texture_normal = SubResource("AtlasTexture_2icyy")
-skill_id = "espantalho_base"
-
-[node name="Gelo" type="Control" parent="TreeContainer" unique_id=185604951]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Node_Gelo" parent="TreeContainer/Gelo" unique_id=1604805575 instance=ExtResource("2_sn")]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -189.0
-offset_top = -146.0
-offset_right = -109.0
-offset_bottom = -66.0
-grow_horizontal = 2
-grow_vertical = 2
-texture_normal = SubResource("AtlasTexture_elhmr")
-skill_id = "gelo_base"
-
-[node name="Planta" type="Control" parent="TreeContainer" unique_id=1907125596]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Node_Planta" parent="TreeContainer/Planta" unique_id=991396416 instance=ExtResource("2_sn")]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 67.0
-offset_top = -42.0
-offset_right = 147.0
-offset_bottom = 38.0
-grow_horizontal = 2
-grow_vertical = 2
-texture_normal = SubResource("AtlasTexture_whsey")
-skill_id = "planta_base"
-
 [node name="TopPanel" type="Panel" parent="." unique_id=1597543385]
 anchors_preset = 10
 anchor_right = 1.0
@@ -450,3 +1024,4 @@ offset_top = 10.0
 offset_right = -20.0
 offset_bottom = 41.0
 grow_horizontal = 0
+text = "Sair"

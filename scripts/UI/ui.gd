@@ -34,6 +34,9 @@ var current_crafting_items: Array[String] = []
 var selected_tower: Node2D = null
 
 func _ready() -> void:
+	if has_node("BtnCheat"):
+		$BtnCheat.pressed.connect(_on_cheat_pressed)
+
 	GameManager.xp_changed.connect(_on_xp_changed)
 	GameManager.lives_changed.connect(_on_lives_changed)
 	GameManager.wave_updated.connect(_on_wave_updated)
@@ -279,3 +282,27 @@ func _on_btn_skill_tree_pressed():
 		add_child(skill_tree_instance)
 	skill_tree_instance.show()
 	get_tree().paused = true
+
+func _on_cheat_pressed() -> void:
+	var dir = DirAccess.open("res://resources/towers/")
+	if dir:
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name != "":
+			if file_name.ends_with(".tres") or file_name.ends_with(".res"):
+				var data = load("res://resources/towers/" + file_name) as TowerData
+				if data:
+					GameManager.tower_inventory[data.tower_name] = 10
+			file_name = dir.get_next()
+			
+	for item in GameManager.inventory.keys():
+		GameManager.inventory[item] = 99
+		
+	GameManager.skill_points += 99
+	GameManager.skill_points_changed.emit(GameManager.skill_points)
+	
+	GameManager.tower_inventory_changed.emit()
+	GameManager.inventory_changed.emit()
+	
+	GameManager.xp += 10000
+	GameManager.xp_changed.emit(GameManager.xp)

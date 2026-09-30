@@ -235,9 +235,17 @@ text = "Reiniciar"
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 1056.0
-offset_top = -460.0
-offset_right = 1235.0
-offset_bottom = -420.0
+offset_left = 803.0
+offset_top = -70.0
+offset_right = 982.0
+offset_bottom = -30.0
 grow_vertical = 0
 text = "Árvore de Habilidades"
+
+[node name="BtnCheat" type="Button" parent="." unique_id=2037152669]
+modulate = Color(1, 0.5, 0.5, 1)
+offset_left = 817.0
+offset_top = 623.0
+offset_right = 967.0
+offset_bottom = 663.0
+text = "CHEAT: Liberar"

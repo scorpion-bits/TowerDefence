@@ -10,6 +10,16 @@ extends Node2D
 var show_range: bool = false
 var valid_path_points: PackedVector2Array = []
 
+var frenzy_active: bool = false
+var frenzy_timer: float = 0.0
+
+var current_target: Node2D = null
+var laser_targets: Array[Node2D] = []
+var laser_chain_lines: Array = []
+var laser_heat_timer: float = 0.0
+var laser_heat_stacks: int = 0
+var laser_lock_timer: float = 0.0
+
 func _ready() -> void:
 	add_to_group("towers")
 	if data:
@@ -21,32 +31,192 @@ func _ready() -> void:
 			targeting_component.enemy_entered.connect(_on_enemy_entered_aura)
 			targeting_component.enemy_exited.connect(_on_enemy_exited_aura)
 			
+		if data.tower_name == "Espantalho (Buff)":
+			targeting_component.enemy_entered.connect(_on_enemy_entered_espantalho)
+			targeting_component.enemy_exited.connect(_on_enemy_exited_espantalho)
+			
 	GameManager.tower_selected.connect(_on_global_tower_selected)
 	GameManager.tower_deselected.connect(func(): set_show_range(false))
 	GameManager.skill_unlocked.connect(_on_skill_unlocked)
 	
 	call_deferred("_find_valid_path_points")
 
+var spore_timer: float = 0.0
+
+func _process(delta: float) -> void:
+	if data and data.tower_name == "Espantalho (Buff)" and GameManager.has_skill("espantalho_frenesi"):
+		frenzy_timer += delta
+		if frenzy_timer >= 20.0:
+			frenzy_active = true
+			frenzy_timer = 0.0
+			_update_towers_in_range_stats()
+			get_tree().create_timer(5.0).timeout.connect(func():
+				frenzy_active = false
+				if is_instance_valid(self): _update_towers_in_range_stats()
+			)
+			
+	if data and data.tower_name == "Planta Peçonhenta" and GameManager.has_skill("planta_esporos"):
+		spore_timer += delta
+		if spore_timer >= 15.0:
+			spore_timer = 0.0
+			_spawn_spore_cloud()
+			
+	if data and data.effect_type == "laser":
+		laser_targets.clear()
+		laser_chain_lines.clear()
+		
+		if laser_lock_timer > 0:
+			laser_lock_timer -= delta
+			current_target = null
+			laser_heat_stacks = 0
+			laser_heat_timer = 0.0
+			queue_redraw()
+		else:
+			if is_instance_valid(current_target) and current_target.global_position.distance_to(global_position) <= get_current_range() and current_target.progress_ratio < 1.0:
+				if GameManager.has_skill("olho_calor_1"):
+					laser_heat_timer += delta
+					if laser_heat_timer >= 1.0 and laser_heat_stacks < 4:
+						laser_heat_stacks += 1
+						laser_heat_timer -= 1.0
+			else:
+				var new_target = targeting_component.get_closest_target(global_position)
+				if new_target:
+					if not GameManager.has_skill("olho_instant"):
+						laser_lock_timer = 0.3
+					current_target = new_target
+					laser_heat_stacks = 0
+					laser_heat_timer = 0.0
+				else:
+					current_target = null
+			
+			if is_instance_valid(current_target) and laser_lock_timer <= 0:
+				laser_targets.append(current_target)
+				if GameManager.has_skill("olho_bifurcado"):
+					var enemies = targeting_component.enemies_in_range.filter(func(e): return is_instance_valid(e) and e != current_target)
+					if enemies.size() > 0:
+						laser_targets.append(enemies[0])
+				
+				if GameManager.has_skill("olho_cadeia"):
+					var exclude = laser_targets.duplicate()
+					for t in laser_targets:
+						var ricochet = 2
+						var enemies = targeting_component.enemies_in_range.filter(func(e): return is_instance_valid(e) and not exclude.has(e))
+						for i in range(min(ricochet, enemies.size())):
+							laser_chain_lines.append([t, enemies[i]])
+							exclude.append(enemies[i])
+			queue_redraw()
+
+func _update_towers_in_range_stats() -> void:
+	var towers = get_tree().get_nodes_in_group("towers")
+	for t in towers:
+		if t != self and is_instance_valid(t):
+			if t.global_position.distance_to(global_position) <= get_current_range():
+				t._update_stats()
+
+func _on_enemy_entered_espantalho(enemy: Node2D) -> void:
+	if GameManager.has_skill("espantalho_slow_1"):
+		if enemy.has_method("add_slow"):
+			enemy.add_slow(0.98) # 2% slow
+	if GameManager.has_skill("espantalho_panico"):
+		if randf() <= 0.05: # 5% chance
+			if enemy.has_method("apply_panic"):
+				enemy.apply_panic(2.0)
+	if GameManager.has_skill("espantalho_xp_1"):
+		enemy.set_meta("espantalho_xp_buff", true)
+
+func _on_enemy_exited_espantalho(enemy: Node2D) -> void:
+	if GameManager.has_skill("espantalho_slow_1"):
+		if enemy.has_method("remove_slow"):
+			enemy.remove_slow(0.98)
+	if enemy.has_meta("espantalho_xp_buff"):
+		enemy.set_meta("espantalho_xp_buff", false)
+
 func _on_skill_unlocked(_skill_id: String) -> void:
 	# Update stats whenever a new skill is unlocked
 	_update_stats()
 
+func get_espantalhos_in_range() -> Array:
+	var espantalhos = []
+	var towers = get_tree().get_nodes_in_group("towers")
+	for t in towers:
+		if t != self and is_instance_valid(t) and t.data and t.data.tower_name == "Espantalho (Buff)":
+			if t.global_position.distance_to(global_position) <= t.get_current_range():
+				espantalhos.append(t)
+	return espantalhos
+
+func get_buff_multiplier(buff_type: String) -> float:
+	var espantalhos = get_espantalhos_in_range()
+	if espantalhos.is_empty(): return 1.0
+	
+	var mult = 1.0
+	var has_synergy = false
+	var synergy_count = 0
+	for esp in espantalhos:
+		if GameManager.has_skill("espantalho_sinergia"):
+			synergy_count += 1
+	if synergy_count >= 2:
+		has_synergy = true
+		
+	if buff_type == "damage" and GameManager.has_skill("espantalho_dano_1"):
+		mult += 0.15
+	if buff_type == "attack_speed" and GameManager.has_skill("espantalho_spd_1"):
+		mult += 0.15
+	if buff_type == "attack_speed" and GameManager.has_skill("espantalho_frenesi"):
+		for esp in espantalhos:
+			if "frenzy_active" in esp and esp.frenzy_active:
+				mult += 1.0
+				break
+	if buff_type == "range" and GameManager.has_skill("espantalho_range_buff"):
+		mult += 0.05
+	if buff_type == "proj_speed" and GameManager.has_skill("espantalho_range_buff"):
+		mult += 0.10
+		
+	if has_synergy and (buff_type == "damage" or buff_type == "attack_speed" or buff_type == "range" or buff_type == "proj_speed"):
+		mult += 0.02
+		
+	return mult
+
 func get_current_damage() -> int:
 	if not data: return 0
-	return int(data.attack_damage + GameManager.get_tower_bonus(data.tower_name, "damage"))
+	var base = data.attack_damage + GameManager.get_tower_bonus(data.tower_name, "damage")
+	return int(base * get_buff_multiplier("damage"))
 
 func get_current_range() -> float:
 	if not data: return 0.0
-	return data.attack_range + GameManager.get_tower_bonus(data.tower_name, "range")
+	var r = data.attack_range + GameManager.get_tower_bonus(data.tower_name, "range")
+	var r_pct = GameManager.get_tower_bonus(data.tower_name, "range_pct")
+	if r_pct > 0.0:
+		r *= (1.0 + r_pct)
+	r *= get_buff_multiplier("range")
+	return r
 
 func get_current_cooldown() -> float:
 	if not data: return 0.1
 	var cd = data.attack_cooldown - GameManager.get_tower_bonus(data.tower_name, "fire_rate")
-	return max(0.1, cd)
+	if data.tower_name == "Olho Flutuante (Laser)" and GameManager.has_skill("olho_spd_1"):
+		cd = 0.10
+	return max(0.05, cd / get_buff_multiplier("attack_speed"))
+
+func get_crit_chance() -> float:
+	if not data: return 0.0
+	var chance = 0.0
+	var espantalhos = get_espantalhos_in_range()
+	if espantalhos.size() > 0 and GameManager.has_skill("espantalho_spd_1"):
+		chance += 0.10
+		var synergy_count = 0
+		for esp in espantalhos:
+			if GameManager.has_skill("espantalho_sinergia"): synergy_count += 1
+		if synergy_count >= 2: chance += 0.02
+	return chance
+
+func get_proj_speed() -> float:
+	if not data: return 300.0
+	return data.projectile_speed * get_buff_multiplier("proj_speed")
 
 func get_current_effect_value() -> float:
 	if not data: return 0.0
 	return data.effect_value + GameManager.get_tower_bonus(data.tower_name, "effect_value")
+
 
 func _find_valid_path_points() -> void:
 	valid_path_points.clear()
@@ -71,6 +241,19 @@ func set_show_range(is_visible: bool) -> void:
 func _draw() -> void:
 	if show_range and data:
 		draw_circle(Vector2.ZERO, get_current_range(), Color(0.2, 0.8, 1.0, 0.2))
+		
+	if data and data.effect_type == "laser" and laser_targets.size() > 0:
+		var color = Color(1.0, 0.0, 1.0) # Purple base
+		if laser_heat_stacks >= 4 and GameManager.has_skill("olho_fusao"):
+			color = Color(1.0, 0.5, 0.0) # Orange/Red when fusion maxed
+		
+		for t in laser_targets:
+			if is_instance_valid(t):
+				draw_line(Vector2.ZERO, to_local(t.global_position), color, 3.0)
+				
+		for chain in laser_chain_lines:
+			if is_instance_valid(chain[0]) and is_instance_valid(chain[1]):
+				draw_line(to_local(chain[0].global_position), to_local(chain[1].global_position), color, 1.5)
 
 func _update_stats() -> void:
 	if targeting_component:
@@ -91,9 +274,46 @@ func _update_stats() -> void:
 
 var attacks_count = 0
 
+func _process_laser_tick() -> void:
+	if laser_targets.is_empty(): return
+	
+	var dmg = get_current_damage()
+	if GameManager.has_skill("olho_dano_1"): dmg += 1
+	if GameManager.has_skill("olho_calor_1"): dmg += laser_heat_stacks
+	if GameManager.has_skill("olho_bifurcado"): dmg = int(max(1, dmg * 0.70))
+	
+	var is_crit = (laser_heat_stacks >= 4 and GameManager.has_skill("olho_fusao"))
+	if is_crit: dmg = int(dmg * 2.0)
+	
+	for t in laser_targets:
+		_deal_laser_damage(t, dmg, is_crit)
+		
+	for chain in laser_chain_lines:
+		if is_instance_valid(chain[1]):
+			_deal_laser_damage(chain[1], dmg, is_crit)
+
+func _deal_laser_damage(tgt: Node2D, dmg: int, is_crit: bool) -> void:
+	if not is_instance_valid(tgt) or not tgt.has_node("HealthComponent"): return
+	
+	if GameManager.has_skill("olho_satelite") and not tgt.has_meta("satelite_mark"):
+		tgt.set_meta("satelite_mark", true)
+		if tgt.has_method("apply_satelite_mark"):
+			tgt.apply_satelite_mark(0.5)
+			
+	if GameManager.has_skill("olho_instant"):
+		if tgt.has_method("apply_laser_slow"):
+			tgt.apply_laser_slow(0.85, 0.5)
+			
+	var hc = tgt.get_node("HealthComponent")
+	hc.take_damage(dmg)
+
 func _on_attack_timer_timeout() -> void:
 	if not data or not projectile_scene or not targeting_component: return
 	
+	if data.effect_type == "laser":
+		_process_laser_tick()
+		return
+		
 	if data.effect_type == "ice_aoe":
 		return 
 		
@@ -145,7 +365,13 @@ func _fire_projectile(target: Node2D) -> void:
 		if GameManager.has_skill("esqueleto_maldicao"): eff = "esqueleto_maldicao"
 		if GameManager.has_skill("esqueleto_perfurante"): eff = "esqueleto_perfurante"
 		
-	proj.setup(target, get_current_damage(), data.projectile_speed, data.color, eff, eff_val)
+	var dmg = get_current_damage()
+	if randf() < get_crit_chance():
+		dmg = int(dmg * 2.0)
+		
+	var p_speed = get_proj_speed()
+		
+	proj.setup(target, dmg, p_speed, data.color, eff, eff_val)
 
 func _shoot(target: Node2D) -> void:
 	if data.effect_type == "buff":
@@ -169,7 +395,7 @@ func _on_enemy_entered_aura(enemy: Node2D) -> void:
 
 func _on_enemy_exited_aura(enemy: Node2D) -> void:
 	if enemy.has_method("remove_slow"):
-		enemy.remove_slow()
+		enemy.remove_slow(get_current_effect_value())
 
 func _spawn_trap_randomly() -> void:
 	if valid_path_points.is_empty():
@@ -215,14 +441,40 @@ func _on_trap_area_entered(area: Area2D, trap: Area2D, e_type: String) -> void:
 			if area.owner.has_method("apply_burn"):
 				area.owner.apply_burn(get_current_damage(), 3.0)
 
+func _spawn_spore_cloud() -> void:
+	if valid_path_points.is_empty():
+		return
+	var random_pt = valid_path_points[randi() % valid_path_points.size()]
+	
+	var cloud = Area2D.new()
+	cloud.global_position = random_pt
+	var col = CollisionShape2D.new()
+	var shape = CircleShape2D.new()
+	shape.radius = 40.0
+	col.shape = shape
+	cloud.add_child(col)
+	
+	var spr = Sprite2D.new()
+	spr.texture = preload("res://icon.svg")
+	spr.scale = Vector2(0.6, 0.6)
+	spr.modulate = Color(0.4, 0.8, 0.2, 0.5) # Verde meio transparente
+	cloud.add_child(spr)
+	
+	get_tree().current_scene.add_child(cloud)
+	
+	var timer = get_tree().create_timer(3.0)
+	timer.timeout.connect(func(): if is_instance_valid(cloud): cloud.queue_free())
+	
+	cloud.area_entered.connect(func(area):
+		if area is HurtboxComponent and area.owner and area.owner.is_in_group("enemies"):
+			if area.owner.has_method("apply_poison"):
+				area.owner.apply_poison(get_current_damage(), 3.0)
+	)
+
 func _on_texture_button_pressed() -> void:
 	GameManager.tower_selected.emit(self)
 
 func _apply_buff_to_towers() -> void:
-	var towers = get_tree().get_nodes_in_group("towers")
-	for t in towers:
-		if t != self and is_instance_valid(t):
-			if t.global_position.distance_to(global_position) <= get_current_range():
-				if t.has_method("get_current_cooldown"):
-					if t.attack_timer:
-						t.attack_timer.start(t.get_current_cooldown() / get_current_effect_value())
+	# Agora os buffs são aplicados passivamente pelas auras (ver getters).
+	# Aqui podemos apenas colocar um efeito visual no futuro, se desejado.
+	pass

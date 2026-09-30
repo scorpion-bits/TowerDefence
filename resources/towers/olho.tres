@@ -6,9 +6,9 @@
 script = ExtResource("1_2hfd5")
 tower_name = "Olho Flutuante (Laser)"
 cost = 200
-attack_range = 220.0
+attack_range = 100.0
 attack_damage = 1
-attack_cooldown = 0.05
+attack_cooldown = 0.15
 projectile_speed = 1000.0
 color = Color(1, 0, 1, 1)
 effect_type = "laser"

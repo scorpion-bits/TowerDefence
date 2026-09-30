@@ -64,11 +64,49 @@ var skill_tree_data: Dictionary = {
 
 	"fogo_base": { "tower": "Golem de Fogo (Chamas)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
 	"sapo_base": { "tower": "Sapo (Sniper)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
+	
 	"olho_base": { "tower": "Olho Flutuante (Laser)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
+	"olho_spd_1": { "tower": "Olho Flutuante (Laser)", "stat": "special", "value": 0.0, "requires": ["olho_base"] },
+	"olho_calor_1": { "tower": "Olho Flutuante (Laser)", "stat": "special", "value": 0.0, "requires": ["olho_spd_1"] },
+	"olho_fusao": { "tower": "Olho Flutuante (Laser)", "stat": "special", "value": 0.0, "requires": ["olho_calor_1"], "exclusive_group": "olho_tier3" },
+
+	"olho_dano_1": { "tower": "Olho Flutuante (Laser)", "stat": "special", "value": 0.0, "requires": ["olho_base"] },
+	"olho_bifurcado": { "tower": "Olho Flutuante (Laser)", "stat": "special", "value": 0.0, "requires": ["olho_dano_1"] },
+	"olho_cadeia": { "tower": "Olho Flutuante (Laser)", "stat": "special", "value": 0.0, "requires": ["olho_bifurcado"], "exclusive_group": "olho_tier3" },
+
+	"olho_range_1": { "tower": "Olho Flutuante (Laser)", "stat": "range", "value": 20.0, "requires": ["olho_base"] },
+	"olho_instant": { "tower": "Olho Flutuante (Laser)", "stat": "special", "value": 0.0, "requires": ["olho_range_1"] },
+	"olho_satelite": { "tower": "Olho Flutuante (Laser)", "stat": "range", "value": 40.0, "requires": ["olho_instant"], "exclusive_group": "olho_tier3" },
+
 	"pedra_base": { "tower": "Golem de Pedra (Canhão)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
+	
 	"espantalho_base": { "tower": "Espantalho (Buff)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
+	"espantalho_dano_1": { "tower": "Espantalho (Buff)", "stat": "special", "value": 0.0, "requires": ["espantalho_base"] },
+	"espantalho_spd_1": { "tower": "Espantalho (Buff)", "stat": "special", "value": 0.0, "requires": ["espantalho_dano_1"] },
+	"espantalho_frenesi": { "tower": "Espantalho (Buff)", "stat": "special", "value": 0.0, "requires": ["espantalho_spd_1"], "exclusive_group": "espantalho_tier3" },
+
+	"espantalho_slow_1": { "tower": "Espantalho (Buff)", "stat": "special", "value": 0.0, "requires": ["espantalho_base"] },
+	"espantalho_xp_1": { "tower": "Espantalho (Buff)", "stat": "special", "value": 0.0, "requires": ["espantalho_slow_1"] },
+	"espantalho_panico": { "tower": "Espantalho (Buff)", "stat": "special", "value": 0.0, "requires": ["espantalho_xp_1"], "exclusive_group": "espantalho_tier3" },
+
+	"espantalho_range_1": { "tower": "Espantalho (Buff)", "stat": "range_pct", "value": 0.20, "requires": ["espantalho_base"] },
+	"espantalho_range_buff": { "tower": "Espantalho (Buff)", "stat": "special", "value": 0.0, "requires": ["espantalho_range_1"] },
+	"espantalho_sinergia": { "tower": "Espantalho (Buff)", "stat": "special", "value": 0.0, "requires": ["espantalho_range_buff"], "exclusive_group": "espantalho_tier3" },
+
 	"gelo_base": { "tower": "Golem de Gelo (Lentidão)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
 	"planta_base": { "tower": "Planta Peçonhenta", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
+	
+	"planta_dano_1": { "tower": "Planta Peçonhenta", "stat": "special", "value": 0.0, "requires": ["planta_base"] },
+	"planta_stack_1": { "tower": "Planta Peçonhenta", "stat": "special", "value": 0.0, "requires": ["planta_dano_1"] },
+	"planta_necrose": { "tower": "Planta Peçonhenta", "stat": "special", "value": 0.0, "requires": ["planta_stack_1"], "exclusive_group": "planta_tier3" },
+
+	"planta_spd_1": { "tower": "Planta Peçonhenta", "stat": "fire_rate", "value": 0.20, "requires": ["planta_base"] },
+	"planta_esporos": { "tower": "Planta Peçonhenta", "stat": "special", "value": 0.0, "requires": ["planta_spd_1"] },
+	"planta_epidemia": { "tower": "Planta Peçonhenta", "stat": "special", "value": 0.0, "requires": ["planta_esporos"], "exclusive_group": "planta_tier3" },
+
+	"planta_range_1": { "tower": "Planta Peçonhenta", "stat": "range_pct", "value": 0.20, "requires": ["planta_base"] },
+	"planta_neuro": { "tower": "Planta Peçonhenta", "stat": "special", "value": 0.0, "requires": ["planta_range_1"] },
+	"planta_acido": { "tower": "Planta Peçonhenta", "stat": "special", "value": 0.0, "requires": ["planta_neuro"], "exclusive_group": "planta_tier3" },
 	
 }
 
