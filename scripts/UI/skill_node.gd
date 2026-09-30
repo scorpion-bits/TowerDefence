@@ -45,9 +45,8 @@ func _update_state() -> void:
 
 	# Set tooltip
 	var display_cost = cost if not is_unlocked else 0
-	tooltip_text = "Habilidade: %s\nTorre: %s\nAtributo: %s +%s\nCusto: %d SP" % [
-		skill_id, data.tower, data.stat, str(data.value), display_cost
-	]
+	var desc = GameManager.get_skill_description(skill_id)
+	tooltip_text = "%s — %s\nCusto: %d SP" % [data.tower, desc, display_cost]
 	
 	# Update tree drawing
 	var p = get_parent()

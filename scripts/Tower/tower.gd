@@ -38,8 +38,18 @@ func _ready() -> void:
 	GameManager.tower_selected.connect(_on_global_tower_selected)
 	GameManager.tower_deselected.connect(func(): set_show_range(false))
 	GameManager.skill_unlocked.connect(_on_skill_unlocked)
-	
+	GameManager.relocate_started.connect(_on_relocate_started_global)
+
 	call_deferred("_find_valid_path_points")
+
+func _on_relocate_started_global(tower: Node2D) -> void:
+	# Para de atacar/spawnar armadilhas no local antigo assim que a torre é pega para mover.
+	# É reativado por _update_stats(), chamado ao concluir ou cancelar a realocação (ver level.gd).
+	if tower == self:
+		attack_timer.stop()
+
+func _get_valid_enemies(exclude: Array = []) -> Array:
+	return targeting_component.enemies_in_range.filter(func(e): return is_instance_valid(e) and not exclude.has(e))
 
 var spore_timer: float = 0.0
 
@@ -79,26 +89,31 @@ func _process(delta: float) -> void:
 				laser_targets.append(current_target)
 				
 				if GameManager.has_skill("olho_bifurcado"):
-					var enemies = targeting_component.enemies_in_range.filter(func(e): return is_instance_valid(e) and e != current_target)
+					var enemies = _get_valid_enemies([current_target])
 					if enemies.size() > 0:
 						laser_targets.append(enemies[0])
-				
+
 				if GameManager.has_skill("olho_cadeia"):
 					var exclude = laser_targets.duplicate()
 					for t in laser_targets:
 						var ricochet = 2
-						var enemies = targeting_component.enemies_in_range.filter(func(e): return is_instance_valid(e) and not exclude.has(e))
+						var enemies = _get_valid_enemies(exclude)
 						for i in range(min(ricochet, enemies.size())):
 							laser_chain_lines.append([t, enemies[i]])
 							exclude.append(enemies[i])
 		else:
 			# Busca novo target
+			var had_target = is_instance_valid(current_target)
 			var new_target = targeting_component.get_closest_target(global_position)
 			current_target = new_target
 			laser_heat_stacks = 0
 			laser_heat_timer = 0.0
 			if new_target:
-				if not GameManager.has_skill("olho_instant"):
+				# A trava de mira (delay) so se aplica quando a torre estava sem alvo nenhum.
+				# Se estavamos trocando de um alvo que acabou de sair do alcance, o novo alvo
+				# e engajado imediatamente para evitar que alvos aglomerados resetem a mira
+				# indefinidamente e a torre fique sem atacar.
+				if not had_target and not GameManager.has_skill("olho_instant"):
 					laser_lock_timer = 0.3
 				else:
 					laser_lock_timer = 0.0
@@ -141,7 +156,10 @@ func get_espantalhos_in_range() -> Array:
 	var towers = get_tree().get_nodes_in_group("towers")
 	for t in towers:
 		if t != self and is_instance_valid(t) and t.data and t.data.tower_name == "Espantalho (Buff)":
-			if t.global_position.distance_to(global_position) <= t.get_current_range():
+			# Usa o alcance base (sem multiplicador de buff) para evitar recursao infinita:
+			# get_current_range() de t chamaria get_buff_multiplier() de t, que chamaria
+			# get_espantalhos_in_range() de t novamente, e assim por diante entre torres mutuamente no alcance.
+			if t.global_position.distance_to(global_position) <= t.get_base_range():
 				espantalhos.append(t)
 	return espantalhos
 
@@ -182,14 +200,16 @@ func get_current_damage() -> int:
 	var base = data.attack_damage + GameManager.get_tower_bonus(data.tower_name, "damage")
 	return int(base * get_buff_multiplier("damage"))
 
-func get_current_range() -> float:
+func get_base_range() -> float:
 	if not data: return 0.0
 	var r = data.attack_range + GameManager.get_tower_bonus(data.tower_name, "range")
 	var r_pct = GameManager.get_tower_bonus(data.tower_name, "range_pct")
 	if r_pct > 0.0:
 		r *= (1.0 + r_pct)
-	r *= get_buff_multiplier("range")
 	return r
+
+func get_current_range() -> float:
+	return get_base_range() * get_buff_multiplier("range")
 
 func get_current_cooldown() -> float:
 	if not data: return 0.1
@@ -346,7 +366,7 @@ func _fire_spiral() -> void:
 		# mas precisamos alterar o projétil para lidar com isso ou dar um alvo falso.
 		# O ideal é achar o inimigo mais próximo naquela direção, ou disparar em linha reta.
 		# Vamos pegar inimigos aleatórios para simular a espiral!
-		var enemies = targeting_component.enemies_in_range.filter(func(e): return is_instance_valid(e))
+		var enemies = _get_valid_enemies()
 		var tgt = enemies[i % enemies.size()] if enemies.size() > 0 else null
 		if tgt:
 			proj.setup(tgt, get_current_damage(), data.projectile_speed, data.color, data.effect_type, get_current_effect_value())
@@ -382,7 +402,7 @@ func _shoot(target: Node2D) -> void:
 	_fire_projectile(target)
 	
 	if data.tower_name == "Esqueleto (Básico)" and GameManager.has_skill("esqueleto_arco_duplo"):
-		var enemies = targeting_component.enemies_in_range.filter(func(e): return is_instance_valid(e))
+		var enemies = _get_valid_enemies()
 		if enemies.size() > 1:
 			var second = enemies[0] if enemies[0] != target else enemies[1]
 			_fire_projectile(second)
@@ -398,49 +418,93 @@ func _on_enemy_exited_aura(enemy: Node2D) -> void:
 	if enemy.has_method("remove_slow"):
 		enemy.remove_slow(get_current_effect_value())
 
-func _spawn_trap_randomly() -> void:
-	if valid_path_points.is_empty():
-		return
-		
-	var random_pt = valid_path_points[randi() % valid_path_points.size()]
-	
+# Pool de armadilhas (fire_path/poison_path) reutilizáveis, para evitar criar/destruir
+# Area2D+CollisionShape2D+Sprite2D a cada ataque (algumas torres atiram a cada 0.1s).
+# Cada item do pool: { "area": Area2D, "sprite": Sprite2D }
+var _trap_pool: Array = []
+var _trap_spawn_counter: int = 0
+
+func _get_pooled_trap() -> Dictionary:
+	for entry in _trap_pool:
+		if is_instance_valid(entry.area) and not entry.area.visible:
+			return entry
+	var entry = _create_trap_node()
+	_trap_pool.append(entry)
+	return entry
+
+func _create_trap_node() -> Dictionary:
 	var trap = Area2D.new()
-	trap.global_position = random_pt
-	
+
 	var col = CollisionShape2D.new()
 	var shape = CircleShape2D.new()
 	shape.radius = 15.0
 	col.shape = shape
 	trap.add_child(col)
-	
+
 	var spr = Sprite2D.new()
 	spr.texture = preload("res://icon.svg")
 	spr.scale = Vector2(0.2, 0.2)
+	trap.add_child(spr)
+
+	trap.area_entered.connect(func(area): _on_trap_area_entered(area, trap))
+
+	trap.hide()
+	trap.monitoring = false
+	get_tree().current_scene.add_child(trap)
+
+	return { "area": trap, "sprite": spr }
+
+func _spawn_trap_randomly() -> void:
+	if valid_path_points.is_empty():
+		return
+
+	var random_pt = valid_path_points[randi() % valid_path_points.size()]
+	var e_type = data.effect_type
+
+	var entry = _get_pooled_trap()
+	var trap: Area2D = entry.area
+	var spr: Sprite2D = entry.sprite
+
+	# Token de geração: identifica esta ativação específica da armadilha reaproveitada.
+	# Sem isso, o timer de expiração de uma vida anterior (ex.: a armadilha morreu cedo
+	# por ter sido pisada e já foi reaproveitada num novo spawn) esconderia a instância
+	# atual antes da hora, prendendo o pool numa única armadilha sendo reciclada sem parar.
+	_trap_spawn_counter += 1
+	var spawn_id = _trap_spawn_counter
+
+	trap.global_position = random_pt
+	trap.set_meta("e_type", e_type)
+	trap.set_meta("spawn_id", spawn_id)
 	spr.modulate = data.color
 	spr.modulate.a = 0.8
-	trap.add_child(spr)
-	
-	var e_type = data.effect_type
-	trap.area_entered.connect(func(area): _on_trap_area_entered(area, trap, e_type))
-	
-	get_tree().current_scene.add_child(trap)
-	
-	if e_type == "fire_path":
-		var timer = get_tree().create_timer(3.0)
-		timer.timeout.connect(func(): if is_instance_valid(trap): trap.queue_free())
-	elif e_type == "poison_path":
-		var timer = get_tree().create_timer(10.0)
-		timer.timeout.connect(func(): if is_instance_valid(trap): trap.queue_free())
+	trap.show()
+	trap.monitoring = true
 
-func _on_trap_area_entered(area: Area2D, trap: Area2D, e_type: String) -> void:
+	var lifetime = 3.0 if e_type == "fire_path" else 10.0
+	var timer = get_tree().create_timer(lifetime)
+	timer.timeout.connect(func():
+		if is_instance_valid(trap) and trap.get_meta("spawn_id", -1) == spawn_id:
+			trap.hide()
+			trap.monitoring = false
+	)
+
+func _on_trap_area_entered(area: Area2D, trap: Area2D) -> void:
 	if area is HurtboxComponent and area.owner and area.owner.is_in_group("enemies"):
+		var e_type = trap.get_meta("e_type", "")
 		if e_type == "poison_path":
 			if area.owner.has_method("apply_poison"):
 				area.owner.apply_poison(get_current_damage(), 3.0)
-			if is_instance_valid(trap): trap.queue_free()
+			trap.hide()
+			trap.monitoring = false
 		elif e_type == "fire_path":
 			if area.owner.has_method("apply_burn"):
 				area.owner.apply_burn(get_current_damage(), 3.0)
+
+func _exit_tree() -> void:
+	for entry in _trap_pool:
+		if is_instance_valid(entry.area):
+			entry.area.queue_free()
+	_trap_pool.clear()
 
 func _spawn_spore_cloud() -> void:
 	if valid_path_points.is_empty():

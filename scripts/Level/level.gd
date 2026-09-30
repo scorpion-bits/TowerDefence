@@ -72,7 +72,11 @@ func _cancel_drag() -> void:
 		current_ghost.queue_free()
 		current_ghost = null
 	dragging_data = null
-	
+
 	if is_instance_valid(relocating_tower):
 		relocating_tower.show()
+		# Reativa o ataque (parado em _on_relocate_started_global) caso a realocação seja
+		# cancelada ou solta num local inválido, em vez de concluída em _try_build_tower().
+		if relocating_tower.has_method("_update_stats"):
+			relocating_tower._update_stats()
 		relocating_tower = null

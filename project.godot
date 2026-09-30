@@ -18,6 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 GameManager="*uid://bunn8loiudfnk"
+SkillManager="*res://scripts/Autoload/skill_manager.gd"
+InventoryManager="*res://scripts/Autoload/inventory_manager.gd"
 
 [display]
 
