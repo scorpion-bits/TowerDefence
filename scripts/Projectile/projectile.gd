@@ -32,11 +32,8 @@ func _process(delta: float) -> void:
 
 func _apply_effect(enemy: Node2D) -> void:
 	if effect_type == "slow_hit":
-		if "speed" in enemy.data:
-			var old_speed = enemy.data.speed
-			enemy.data.speed = old_speed * effect_value
-			await get_tree().create_timer(3.0).timeout
-			if is_instance_valid(enemy): enemy.data.speed = old_speed
+		if enemy.has_method("apply_status_slow"):
+			enemy.apply_status_slow("espantalho_slow", effect_value, 3.0)
 	elif effect_type == "instakill":
 		var is_boss = enemy.scale.x > 1.2
 		if not is_boss and enemy.has_node("HealthComponent"):
@@ -45,8 +42,8 @@ func _apply_effect(enemy: Node2D) -> void:
 		var enemies = get_tree().get_nodes_in_group("enemies")
 		for e in enemies:
 			if is_instance_valid(e) and e.global_position.distance_to(enemy.global_position) < 80.0:
-				if "speed" in e.data:
-					e.data.speed *= effect_value
+				if e.has_method("apply_status_slow"):
+					e.apply_status_slow("ice_aoe", effect_value, 2.5)
 	elif effect_type == "fire_path" or effect_type == "poison_path":
 		if enemy.has_node("HealthComponent"):
 			enemy.get_node("HealthComponent").take_damage(int(effect_value))
@@ -57,11 +54,8 @@ func _apply_effect(enemy: Node2D) -> void:
 				if e.has_node("HealthComponent"):
 					e.get_node("HealthComponent").take_damage(int(hitbox_component.damage * 0.5))
 	elif effect_type == "esqueleto_maldicao":
-		if "speed" in enemy.data:
-			var old_speed = enemy.data.speed
-			enemy.data.speed = old_speed * 0.85
-			await get_tree().create_timer(3.0).timeout
-			if is_instance_valid(enemy): enemy.data.speed = old_speed
+		if enemy.has_method("apply_status_slow"):
+			enemy.apply_status_slow("esqueleto_maldicao", 0.85, 3.0)
 
 var pierce_count = 3
 func _on_dealt_damage(hurtbox: HurtboxComponent) -> void:

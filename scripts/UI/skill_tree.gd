@@ -19,7 +19,7 @@ func _ready() -> void:
 
 func _update_labels(_pts: int = 0) -> void:
 	points_label.text = "Skill Points: " + str(GameManager.skill_points)
-	cost_label.text = "Custo da Próxima: " + str(GameManager.get_next_skill_cost())
+	cost_label.text = "Custos: Inicial (0) | Tier 1 (2) | Tier 2 (4) | Tier 3 (6)"
 
 func _on_skill_unlocked(_id: String) -> void:
 	_update_labels()

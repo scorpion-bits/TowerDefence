@@ -33,12 +33,28 @@ var current_crafting_items: Array[String] = []
 
 var selected_tower: Node2D = null
 
+var sp_label: Label
+var btn_move: Button
+
 func _ready() -> void:
+	if upgrade_bar:
+		btn_move = Button.new()
+		btn_move.text = "Mover Torre"
+		upgrade_bar.add_child(btn_move)
+		upgrade_bar.move_child(btn_move, 2)
+		btn_move.pressed.connect(_on_move_tower_pressed)
+
 	if has_node("BtnCheat"):
 		$BtnCheat.pressed.connect(_on_cheat_pressed)
+		
+	if has_node("Status"):
+		sp_label = Label.new()
+		sp_label.text = "SP: 0"
+		$Status.add_child(sp_label)
 
 	GameManager.xp_changed.connect(_on_xp_changed)
 	GameManager.lives_changed.connect(_on_lives_changed)
+	GameManager.skill_points_changed.connect(_on_sp_changed)
 	GameManager.wave_updated.connect(_on_wave_updated)
 	GameManager.tower_selected.connect(_on_tower_selected)
 	GameManager.tower_deselected.connect(_on_tower_deselected)
@@ -54,6 +70,7 @@ func _ready() -> void:
 	
 	_on_xp_changed(GameManager.xp)
 	_on_lives_changed(GameManager.lives)
+	_on_sp_changed(GameManager.skill_points)
 	
 	GameManager.tower_inventory_changed.connect(_load_towers)
 	GameManager.inventory_changed.connect(_update_inventory_ui)
@@ -69,7 +86,9 @@ func _ready() -> void:
 	if btn_sell_tower: btn_sell_tower.pressed.connect(_on_sell_tower_pressed)
 	if has_node("BtnSkillTree"): $BtnSkillTree.pressed.connect(_on_btn_skill_tree_pressed)
 	
-	_on_tower_deselected() # Esconde de inÃ­cio
+	_setup_mercado()
+	
+	_on_tower_deselected() # Esconde de início
 
 func _on_sell_tower_pressed() -> void:
 	if selected_tower and is_instance_valid(selected_tower):
@@ -77,6 +96,11 @@ func _on_sell_tower_pressed() -> void:
 		GameManager.tower_inventory[tower_name] = GameManager.tower_inventory.get(tower_name, 0) + 1
 		GameManager.tower_inventory_changed.emit()
 		selected_tower.queue_free()
+		GameManager.tower_deselected.emit()
+
+func _on_move_tower_pressed() -> void:
+	if selected_tower and is_instance_valid(selected_tower):
+		GameManager.relocate_started.emit(selected_tower)
 		GameManager.tower_deselected.emit()
 
 func _on_tower_selected(tower: Node2D) -> void:
@@ -112,9 +136,13 @@ func _on_xp_changed(new_amount: int) -> void:
 
 func _on_lives_changed(new_amount: int) -> void:
 	if lives_label: lives_label.text = "Vidas: " + str(new_amount)
+
+func _on_sp_changed(new_amount: int) -> void:
+	if sp_label: sp_label.text = "SP: " + str(new_amount)
 	
 func _on_wave_updated(wave_num: int) -> void:
 	if wave_label: wave_label.text = "Onda: " + str(wave_num)
+	GameManager.refresh_shop()
 
 func _on_game_over() -> void:
 	if game_over_panel: 
@@ -229,7 +257,20 @@ func _on_craft_pressed() -> void:
 		GameManager.tower_inventory[result] = GameManager.tower_inventory.get(result, 0) + 1
 		for item in current_crafting_items:
 			GameManager.inventory[item] -= 1
-		current_crafting_items.clear()
+			
+		var needed = {}
+		for item in current_crafting_items:
+			needed[item] = needed.get(item, 0) + 1
+			
+		var can_keep = true
+		for item in needed:
+			if GameManager.inventory.get(item, 0) < needed[item]:
+				can_keep = false
+				break
+				
+		if not can_keep:
+			current_crafting_items.clear()
+			
 		_update_crafting_slots()
 		_update_inventory_ui()
 		GameManager.tower_inventory_changed.emit()
@@ -306,3 +347,83 @@ func _on_cheat_pressed() -> void:
 	
 	GameManager.xp += 10000
 	GameManager.xp_changed.emit(GameManager.xp)
+
+var mercado_tab: MarginContainer
+var btn_buy_specific: Button
+var btn_buy_chest: Button
+
+func _setup_mercado() -> void:
+	if not has_node("BuildPanel/TabContainer"): return
+	
+	mercado_tab = MarginContainer.new()
+	mercado_tab.name = "Mercado"
+	mercado_tab.add_theme_constant_override("margin_left", 10)
+	mercado_tab.add_theme_constant_override("margin_top", 10)
+	mercado_tab.add_theme_constant_override("margin_right", 10)
+	mercado_tab.add_theme_constant_override("margin_bottom", 10)
+	
+	var vbox = VBoxContainer.new()
+	mercado_tab.add_child(vbox)
+	
+	var title = Label.new()
+	title.text = "Gaste XP por Materiais"
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(title)
+	
+	var spacer1 = Control.new()
+	spacer1.custom_minimum_size = Vector2(0, 15)
+	vbox.add_child(spacer1)
+	
+	btn_buy_specific = Button.new()
+	btn_buy_specific.custom_minimum_size = Vector2(0, 50)
+	vbox.add_child(btn_buy_specific)
+	btn_buy_specific.pressed.connect(_on_buy_specific)
+	
+	var spacer2 = Control.new()
+	spacer2.custom_minimum_size = Vector2(0, 15)
+	vbox.add_child(spacer2)
+	
+	btn_buy_chest = Button.new()
+	btn_buy_chest.text = "Baú Misterioso\n(Custo: 1000 XP)\nChance de Vir Qualquer Material"
+	btn_buy_chest.custom_minimum_size = Vector2(0, 50)
+	vbox.add_child(btn_buy_chest)
+	btn_buy_chest.pressed.connect(_on_buy_chest)
+	
+	$BuildPanel/TabContainer.add_child(mercado_tab)
+	
+	GameManager.shop_updated.connect(_update_mercado_ui)
+	GameManager.xp_changed.connect(_update_mercado_buttons)
+	_update_mercado_ui()
+
+func _update_mercado_ui() -> void:
+	if GameManager.current_shop_item == "":
+		if btn_buy_specific: btn_buy_specific.text = "Nenhum material na loja..."
+	else:
+		if btn_buy_specific: btn_buy_specific.text = "Comprar: %s\n(Custo: 2000 XP)" % GameManager.current_shop_item
+	_update_mercado_buttons(GameManager.xp)
+
+func _update_mercado_buttons(current_xp: int) -> void:
+	if btn_buy_specific:
+		btn_buy_specific.disabled = (current_xp < 2000) or (GameManager.current_shop_item == "")
+	if btn_buy_chest:
+		btn_buy_chest.disabled = (current_xp < 1000)
+
+func _on_buy_specific() -> void:
+	if GameManager.spend_xp(2000):
+		if GameManager.current_shop_item != "":
+			GameManager.inventory[GameManager.current_shop_item] += 1
+			GameManager.inventory_changed.emit()
+			GameManager.item_dropped.emit(GameManager.current_shop_item)
+
+func _on_buy_chest() -> void:
+	if GameManager.spend_xp(1000):
+		# 60% chance to get something, 40% chance nothing
+		if randf() < 0.60:
+			var items = GameManager.inventory.keys()
+			if items.size() > 0:
+				var item = items[randi() % items.size()]
+				GameManager.inventory[item] += 1
+				GameManager.inventory_changed.emit()
+				GameManager.item_dropped.emit(item)
+		else:
+			GameManager.item_dropped.emit("Vento... (Nada!)")

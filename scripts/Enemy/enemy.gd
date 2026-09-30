@@ -44,11 +44,6 @@ func _process(delta: float) -> void:
 		if progress_ratio >= 1.0:
 			_reach_end()
 			
-	if laser_slow_time > 0:
-		laser_slow_time -= delta
-		if laser_slow_time <= 0:
-			remove_slow(0.85)
-			
 	if satelite_mark_time > 0:
 		satelite_mark_time -= delta
 
@@ -77,32 +72,57 @@ func _process(delta: float) -> void:
 			i -= 1
 			
 		if poison_stacks.size() == 0 and has_meta("neuro_slow"):
-			remove_slow(0.80)
 			remove_meta("neuro_slow")
+			
+	var new_speed_modifier = 1.0
+	var keys_to_remove = []
+	for key in active_slows:
+		active_slows[key].time -= delta
+		if active_slows[key].time <= 0:
+			keys_to_remove.append(key)
+		else:
+			new_speed_modifier *= active_slows[key].multiplier
+			
+	for key in keys_to_remove:
+		active_slows.erase(key)
+		
+	if has_meta("neuro_slow"):
+		new_speed_modifier *= 0.80
+		
+	speed_modifier = new_speed_modifier * aura_speed_modifier
 	
 	_update_visuals()
 
-var slow_modifiers: Array[float] = []
+var active_slows: Dictionary = {}
+
+func apply_status_slow(source_id: String, multiplier: float, duration: float) -> void:
+	if active_slows.has(source_id):
+		var current_mult = active_slows[source_id].multiplier
+		active_slows[source_id].multiplier = min(current_mult, multiplier) # Mantém o mais forte (menor valor)
+		active_slows[source_id].time = max(active_slows[source_id].time, duration)
+	else:
+		active_slows[source_id] = {"multiplier": multiplier, "time": duration}
+
+var aura_slows: Dictionary = {}
+var aura_speed_modifier: float = 1.0
 
 func add_slow(amount: float) -> void:
-	slow_modifiers.append(amount)
-	_recalc_speed()
+	if not aura_slows.has(amount):
+		aura_slows[amount] = 0
+	aura_slows[amount] += 1
+	_recalc_aura_speed()
 
 func remove_slow(amount: float = 0.0) -> void:
-	if amount == 0.0:
-		# Fallback for old calls without argument
-		if slow_modifiers.size() > 0:
-			slow_modifiers.pop_front()
-	else:
-		var idx = slow_modifiers.find(amount)
-		if idx != -1:
-			slow_modifiers.remove_at(idx)
-	_recalc_speed()
+	if amount != 0.0 and aura_slows.has(amount):
+		aura_slows[amount] -= 1
+		if aura_slows[amount] <= 0:
+			aura_slows.erase(amount)
+	_recalc_aura_speed()
 
-func _recalc_speed() -> void:
-	speed_modifier = 1.0
-	for m in slow_modifiers:
-		speed_modifier *= m
+func _recalc_aura_speed() -> void:
+	aura_speed_modifier = 1.0
+	for m in aura_slows.keys():
+		aura_speed_modifier *= m
 
 var is_panicked: bool = false
 var panic_time_left: float = 0.0
@@ -111,9 +131,7 @@ var laser_slow_time: float = 0.0
 var satelite_mark_time: float = 0.0
 
 func apply_laser_slow(amt: float, dur: float) -> void:
-	if laser_slow_time <= 0:
-		add_slow(amt)
-	laser_slow_time = dur
+	apply_status_slow("laser", amt, dur)
 
 func apply_satelite_mark(dur: float) -> void:
 	satelite_mark_time = dur
@@ -145,7 +163,6 @@ func apply_poison(dmg: float, duration: float) -> void:
 				total_dmg += s_dmg * ticks_left
 			poison_stacks.clear()
 			if has_meta("neuro_slow"):
-				remove_slow(0.80)
 				remove_meta("neuro_slow")
 			anim_sprite.modulate = Color(0.8, 1.0, 0.4) # Necrose visual flash
 			health_component.take_damage(int(total_dmg))
@@ -158,7 +175,6 @@ func apply_poison(dmg: float, duration: float) -> void:
 	
 	if GameManager.has_skill("planta_neuro") and not has_meta("neuro_slow"):
 		set_meta("neuro_slow", true)
-		add_slow(0.80)
 
 func _update_visuals() -> void:
 	if not data or not anim_sprite: return
@@ -166,7 +182,7 @@ func _update_visuals() -> void:
 		anim_sprite.modulate = Color(1.0, 0.3, 0.0)
 	elif poison_stacks.size() > 0:
 		anim_sprite.modulate = Color(0.6, 0.2, 0.8) # Purple for poison
-	elif slow_modifiers.size() > 0:
+	elif active_slows.size() > 0 or aura_slows.size() > 0 or has_meta("neuro_slow"):
 		anim_sprite.modulate = Color(0.3, 0.6, 1.0)
 	elif is_panicked:
 		anim_sprite.modulate = Color(1.0, 1.0, 0.3) # Yellowish for panic

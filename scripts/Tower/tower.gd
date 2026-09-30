@@ -65,32 +65,19 @@ func _process(delta: float) -> void:
 		laser_targets.clear()
 		laser_chain_lines.clear()
 		
-		if laser_lock_timer > 0:
-			laser_lock_timer -= delta
-			current_target = null
-			laser_heat_stacks = 0
-			laser_heat_timer = 0.0
-			queue_redraw()
-		else:
-			if is_instance_valid(current_target) and current_target.global_position.distance_to(global_position) <= get_current_range() and current_target.progress_ratio < 1.0:
+		# Valida o target atual
+		if is_instance_valid(current_target) and current_target.global_position.distance_to(global_position) <= get_current_range() and current_target.progress_ratio < 1.0:
+			if laser_lock_timer > 0:
+				laser_lock_timer -= delta
+			else:
 				if GameManager.has_skill("olho_calor_1"):
 					laser_heat_timer += delta
 					if laser_heat_timer >= 1.0 and laser_heat_stacks < 4:
 						laser_heat_stacks += 1
 						laser_heat_timer -= 1.0
-			else:
-				var new_target = targeting_component.get_closest_target(global_position)
-				if new_target:
-					if not GameManager.has_skill("olho_instant"):
-						laser_lock_timer = 0.3
-					current_target = new_target
-					laser_heat_stacks = 0
-					laser_heat_timer = 0.0
-				else:
-					current_target = null
-			
-			if is_instance_valid(current_target) and laser_lock_timer <= 0:
+				
 				laser_targets.append(current_target)
+				
 				if GameManager.has_skill("olho_bifurcado"):
 					var enemies = targeting_component.enemies_in_range.filter(func(e): return is_instance_valid(e) and e != current_target)
 					if enemies.size() > 0:
@@ -104,7 +91,21 @@ func _process(delta: float) -> void:
 						for i in range(min(ricochet, enemies.size())):
 							laser_chain_lines.append([t, enemies[i]])
 							exclude.append(enemies[i])
-			queue_redraw()
+		else:
+			# Busca novo target
+			var new_target = targeting_component.get_closest_target(global_position)
+			current_target = new_target
+			laser_heat_stacks = 0
+			laser_heat_timer = 0.0
+			if new_target:
+				if not GameManager.has_skill("olho_instant"):
+					laser_lock_timer = 0.3
+				else:
+					laser_lock_timer = 0.0
+			else:
+				laser_lock_timer = 0.0
+				
+		queue_redraw()
 
 func _update_towers_in_range_stats() -> void:
 	var towers = get_tree().get_nodes_in_group("towers")

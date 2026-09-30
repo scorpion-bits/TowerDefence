@@ -27,37 +27,26 @@ func _update_state() -> void:
 	var data = GameManager.skill_tree_data[skill_id]
 	is_unlocked = GameManager.unlocked_skills.has(skill_id)
 	
-	# Check if requirements are met
-	var reqs_met = true
-	for req in data.requires:
-		if not GameManager.unlocked_skills.has(req):
-			reqs_met = false
-			break
-			
-	if data.has("exclusive_group") and not is_unlocked and reqs_met:
-		for other_id in GameManager.unlocked_skills:
-			var other_data = GameManager.skill_tree_data.get(other_id)
-			if other_data and other_data.has("exclusive_group") and other_data.exclusive_group == data.exclusive_group:
-				reqs_met = false
-				break
-			
-	can_unlock = not is_unlocked and reqs_met and GameManager.skill_points >= GameManager.get_next_skill_cost()
+	var reqs_met = GameManager.can_unlock_skill(skill_id)
+	var cost = GameManager.get_skill_cost(skill_id)
+	
+	can_unlock = not is_unlocked and reqs_met and GameManager.skill_points >= cost
 	
 	# Update visual style
 	if is_unlocked:
-		modulate = Color.WHITE # Yellow/Gold for unlocked
+		modulate = Color.WHITE # Gold for unlocked (sprite should have color)
 	elif reqs_met:
 		if can_unlock:
 			modulate = Color(0.8, 1.0, 0.8) # Green for available to buy
 		else:
-			modulate = Color(0.5, 0.5, 0.5) # White for affordable but not enough points
+			modulate = Color(0.5, 0.5, 0.5)
 	else:
 		modulate = Color(0.15, 0.15, 0.15) # Dark grey for locked
 
 	# Set tooltip
-	var cost = GameManager.get_next_skill_cost() if not is_unlocked else 0
+	var display_cost = cost if not is_unlocked else 0
 	tooltip_text = "Habilidade: %s\nTorre: %s\nAtributo: %s +%s\nCusto: %d SP" % [
-		skill_id, data.tower, data.stat, str(data.value), cost
+		skill_id, data.tower, data.stat, str(data.value), display_cost
 	]
 	
 	# Update tree drawing
@@ -68,14 +57,9 @@ func _update_state() -> void:
 			break
 		p = p.get_parent()
 
-
 func _on_pressed() -> void:
 	if can_unlock:
 		GameManager.buy_skill(skill_id)
 
 func has_reqs_met() -> bool:
-	if not GameManager.skill_tree_data.has(skill_id): return false
-	var data = GameManager.skill_tree_data[skill_id]
-	for req in data.requires:
-		if not GameManager.unlocked_skills.has(req): return false
-	return true
+	return GameManager.can_unlock_skill(skill_id) or is_unlocked

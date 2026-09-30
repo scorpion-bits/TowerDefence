@@ -13,7 +13,7 @@ signal tower_deselected
 signal tower_inventory_changed
 signal inventory_changed
 signal item_dropped(item_name: String)
-
+signal relocate_started(tower: Node2D)
 signal skill_points_changed(new_amount: int)
 signal skill_unlocked(skill_id: String)
 
@@ -115,6 +115,7 @@ func _ready() -> void:
 	item_keys.shuffle()
 	for i in range(4):
 		inventory[item_keys[i]] = 2
+	refresh_shop()
 
 func add_xp(amount: int) -> void:
 	xp += amount
@@ -142,29 +143,72 @@ func roll_loot() -> void:
 		inventory_changed.emit()
 		item_dropped.emit(item)
 
+var current_shop_item: String = ""
+signal shop_updated
+
+func refresh_shop() -> void:
+	var items = inventory.keys()
+	if items.size() > 0:
+		current_shop_item = items[randi() % items.size()]
+		shop_updated.emit()
+
 # --- FUNCOES DA ARVORE DE HABILIDADES ---
 func add_skill_point() -> void:
 	skill_points += 1
 	skill_points_changed.emit(skill_points)
 
-func get_next_skill_cost() -> int:
-	var bought_count = unlocked_skills.size()
-	if unlocked_skills.has("base_start"):
-		bought_count -= 1
-	return bought_count + 1
+func get_skill_tier(skill_id: String) -> int:
+	if skill_id == "base_start": return -1
+	if skill_id.ends_with("_base"): return 0
+	
+	var data = skill_tree_data.get(skill_id)
+	if not data or data.requires.is_empty(): return 0
+	
+	var parent_tier = get_skill_tier(data.requires[0])
+	return parent_tier + 1
 
-func buy_skill(skill_id: String) -> bool:
+func get_skill_cost(skill_id: String) -> int:
+	var tier = get_skill_tier(skill_id)
+	if tier <= 0: return 0 
+	if tier == 1: return 2
+	if tier == 2: return 4
+	if tier >= 3: return 6
+	return 0
+
+func player_owns_tower(tower_name: String) -> bool:
+	if tower_inventory.get(tower_name, 0) > 0: return true
+	var towers_in_game = get_tree().get_nodes_in_group("towers")
+	for t in towers_in_game:
+		if t.data and t.data.tower_name == tower_name:
+			return true
+	return false
+
+func can_unlock_skill(skill_id: String) -> bool:
 	if unlocked_skills.has(skill_id): return false
 	
-	if skill_tree_data.has(skill_id):
-		var data = skill_tree_data[skill_id]
-		if data.has("exclusive_group"):
-			for other_id in unlocked_skills:
-				var other_data = skill_tree_data.get(other_id)
-				if other_data and other_data.has("exclusive_group") and other_data.exclusive_group == data.exclusive_group:
-					return false
+	var data = skill_tree_data.get(skill_id)
+	if not data: return false
 	
-	var cost = get_next_skill_cost()
+	for req in data.requires:
+		if not unlocked_skills.has(req):
+			return false
+			
+	if skill_id.ends_with("_base"):
+		if not player_owns_tower(data.tower):
+			return false
+			
+	if data.has("exclusive_group"):
+		for other_id in unlocked_skills:
+			var other_data = skill_tree_data.get(other_id)
+			if other_data and other_data.has("exclusive_group") and other_data.exclusive_group == data.exclusive_group:
+				return false
+				
+	return true
+
+func buy_skill(skill_id: String) -> bool:
+	if not can_unlock_skill(skill_id): return false
+	
+	var cost = get_skill_cost(skill_id)
 	if skill_points >= cost:
 		skill_points -= cost
 		unlocked_skills[skill_id] = true

@@ -45,8 +45,8 @@ func start_next_wave() -> void:
 	is_wave_active = true
 	enemies_to_spawn_this_wave = 5 + (current_wave * 2)
 	
-	# Boss wave logic
-	if current_wave % 10 == 0:
+	# Boss e Miniboss logic (múltiplos de 5)
+	if current_wave % 5 == 0:
 		enemies_to_spawn_this_wave += 1
 		
 	GameManager.wave_updated.emit(current_wave)
@@ -74,14 +74,23 @@ func _spawn_enemy() -> void:
 	var base_data = enemy_types[tex_index]
 	
 	var modified_data = base_data.duplicate()
-	var is_boss = (current_wave % 10 == 0) and enemies_to_spawn_this_wave == 0 
+	
+	var is_last_enemy = (enemies_to_spawn_this_wave == 1)
+	var is_boss = (current_wave % 10 == 0) and is_last_enemy
+	var is_miniboss = (current_wave % 5 == 0 and current_wave % 10 != 0) and is_last_enemy
 	
 	if is_boss:
-		modified_data.max_health *= 10
-		modified_data.reward *= 5
+		modified_data.max_health *= 12
+		modified_data.reward *= 8
 		modified_data.color = Color.PURPLE
-		modified_data.speed *= 0.4
+		modified_data.speed *= 0.5
 		new_enemy.scale = Vector2(2.5, 2.5)
+	elif is_miniboss:
+		modified_data.max_health *= 6
+		modified_data.reward *= 4
+		modified_data.color = Color.ORANGE
+		modified_data.speed *= 0.7
+		new_enemy.scale = Vector2(1.8, 1.8)
 	else:
 		var scaling_factor = 1.0 + (current_wave * 0.1)
 		modified_data.max_health = int(modified_data.max_health * scaling_factor)
