@@ -395,6 +395,27 @@ func _esqueleto_maybe_fire_second_shot(target: Node2D) -> void:
 	else:
 		_fire_projectile(target)
 
+# --- GOLEM DE PEDRA (CANHÃO) ---
+
+var pedra_demolidor_count: int = 0
+
+func _pedra_projectile_effect(default_effect: String) -> String:
+	if GameManager.has_skill("pedra_bombardeio"): return "pedra_bombardeio"
+	if GameManager.has_skill("pedra_estilhaco"): return "pedra_estilhaco"
+	return default_effect
+
+func _pedra_apply_damage_modifiers(dmg: int, target: Node2D) -> int:
+	if GameManager.has_skill("pedra_anti_boss") and target.scale.x > 1.2:
+		dmg = int(dmg * 1.5)
+
+	if GameManager.has_skill("pedra_demolidor"):
+		pedra_demolidor_count += 1
+		if pedra_demolidor_count >= 4:
+			pedra_demolidor_count = 0
+			dmg = int(dmg * 3.0)
+
+	return dmg
+
 func _fire_spiral() -> void:
 	var count = randi_range(4, 6)
 	for i in range(count):
@@ -426,12 +447,18 @@ func _fire_projectile(target: Node2D) -> void:
 	if data.tower_name == "Esqueleto (Básico)":
 		eff = _esqueleto_projectile_effect(eff)
 
+	if data.tower_name == "Golem de Pedra (Canhão)":
+		eff = _pedra_projectile_effect(eff)
+
 	var dmg = get_current_damage()
 	if randf() < get_crit_chance():
 		dmg = int(dmg * 2.0)
-		
+
+	if data.tower_name == "Golem de Pedra (Canhão)":
+		dmg = _pedra_apply_damage_modifiers(dmg, target)
+
 	var p_speed = get_proj_speed()
-		
+
 	proj.setup(target, dmg, p_speed, data.color, eff, eff_val)
 
 func _shoot(target: Node2D) -> void:
@@ -444,6 +471,17 @@ func _shoot(target: Node2D) -> void:
 	if data.tower_name == "Esqueleto (Básico)":
 		_esqueleto_maybe_fire_second_shot(target)
 
+	if data.tower_name == "Golem de Gelo (Lentidão)":
+		_gelo_maybe_fire_second_shot(target)
+
+# --- GOLEM DE GELO (LENTIDÃO) ---
+
+func _gelo_maybe_fire_second_shot(target: Node2D) -> void:
+	if not GameManager.has_skill("gelo_alvo_duplo"): return
+	var enemies = _get_valid_enemies()
+	if enemies.size() > 1:
+		var second = enemies[0] if enemies[0] != target else enemies[1]
+		_fire_projectile(second)
 
 func _on_enemy_entered_aura(enemy: Node2D) -> void:
 	if enemy.has_method("add_slow"):
@@ -534,8 +572,24 @@ func _on_trap_area_entered(area: Area2D, trap: Area2D) -> void:
 			# estamos dentro do próprio sinal area_entered da trap (in/out signal).
 			trap.set_deferred("monitoring", false)
 		elif e_type == "fire_path":
-			if area.owner.has_method("apply_burn"):
-				area.owner.apply_burn(get_current_damage(), 3.0)
+			_fogo_ignite(area.owner)
+
+# --- GOLEM DE FOGO (CHAMAS) ---
+
+func _fogo_ignite(enemy: Node2D) -> void:
+	if not enemy.has_method("apply_burn"): return
+
+	var duration = 5.0 if GameManager.has_skill("fogo_queima_prolongada") else 3.0
+	var dmg = get_current_damage()
+	enemy.apply_burn(dmg, duration)
+
+	if GameManager.has_skill("fogo_propagacao"):
+		var radius = 50.0 if GameManager.has_skill("fogo_inferno") else 30.0
+		var enemies = get_tree().get_nodes_in_group("enemies")
+		for e in enemies:
+			if is_instance_valid(e) and e != enemy and e.global_position.distance_to(enemy.global_position) < radius:
+				if e.has_method("apply_burn"):
+					e.apply_burn(dmg, duration)
 
 func _exit_tree() -> void:
 	for entry in _trap_pool:

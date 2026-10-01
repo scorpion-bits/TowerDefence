@@ -929,6 +929,159 @@ grow_vertical = 2
 texture_normal = SubResource("AtlasTexture_uiv75")
 skill_id = "pedra_base"
 
+[node name="pedra_dano_1" parent="TreeContainer/Pedra" unique_id=-1294967295 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = 86.0
+offset_right = -70.0
+offset_bottom = 166.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_lnxdn")
+skill_id = "pedra_dano_1"
+
+[node name="pedra_anti_boss" parent="TreeContainer/Pedra" unique_id=-1294967294 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -181.0
+offset_top = 113.0
+offset_right = -101.0
+offset_bottom = 193.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_lnxdn")
+skill_id = "pedra_anti_boss"
+
+[node name="pedra_demolidor" parent="TreeContainer/Pedra" unique_id=-1294967293 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -226.0
+offset_top = 134.0
+offset_right = -146.0
+offset_bottom = 214.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_hkher")
+skill_id = "pedra_demolidor"
+
+[node name="pedra_range_1" parent="TreeContainer/Pedra" unique_id=-1294967292 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -120.0
+offset_top = 109.0
+offset_right = -40.0
+offset_bottom = 189.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_81yc1")
+skill_id = "pedra_range_1"
+
+[node name="pedra_estilhaco" parent="TreeContainer/Pedra" unique_id=-1294967291 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -136.0
+offset_top = 142.0
+offset_right = -56.0
+offset_bottom = 222.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_81yc1")
+skill_id = "pedra_estilhaco"
+
+[node name="pedra_bombardeio" parent="TreeContainer/Pedra" unique_id=-1294967290 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -167.0
+offset_top = 175.0
+offset_right = -87.0
+offset_bottom = 255.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_wa0ai")
+skill_id = "pedra_bombardeio"
+
+[node name="pedra_impacto_1" parent="TreeContainer/Pedra" unique_id=-1294967289 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -88.0
+offset_top = 116.0
+offset_right = -8.0
+offset_bottom = 196.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_pk0co")
+skill_id = "pedra_impacto_1"
+
+[node name="pedra_onda_de_choque" parent="TreeContainer/Pedra" unique_id=-1294967288 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -93.0
+offset_top = 159.0
+offset_right = -13.0
+offset_bottom = 239.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_pk0co")
+skill_id = "pedra_onda_de_choque"
+
+[node name="pedra_atordoamento" parent="TreeContainer/Pedra" unique_id=-1294967287 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -95.99999
+offset_top = 198.0
+offset_right = -15.999992
+offset_bottom = 278.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_ulbj6")
+skill_id = "pedra_atordoamento"
+
 [node name="Gelo" type="Control" parent="TreeContainer" unique_id=185604951]
 anchors_preset = 0
 offset_right = 40.0
@@ -950,6 +1103,159 @@ grow_vertical = 2
 texture_normal = SubResource("AtlasTexture_elhmr")
 skill_id = "gelo_base"
 
+[node name="gelo_lentidao_1" parent="TreeContainer/Gelo" unique_id=-1294967277 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -222.0
+offset_top = -120.0
+offset_right = -142.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_lnxdn")
+skill_id = "gelo_lentidao_1"
+
+[node name="gelo_duracao" parent="TreeContainer/Gelo" unique_id=-1294967276 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -253.0
+offset_top = -127.0
+offset_right = -173.0
+offset_bottom = -47.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_lnxdn")
+skill_id = "gelo_duracao"
+
+[node name="gelo_fragil" parent="TreeContainer/Gelo" unique_id=-1294967275 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -301.0
+offset_top = -136.00002
+offset_right = -221.0
+offset_bottom = -56.000015
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_hkher")
+skill_id = "gelo_fragil"
+
+[node name="gelo_range_1" parent="TreeContainer/Gelo" unique_id=-1294967274 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -211.0
+offset_top = -153.0
+offset_right = -131.0
+offset_bottom = -73.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_81yc1")
+skill_id = "gelo_range_1"
+
+[node name="gelo_zona_persistente" parent="TreeContainer/Gelo" unique_id=-1294967273 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -241.0
+offset_top = -169.0
+offset_right = -161.0
+offset_bottom = -89.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_81yc1")
+skill_id = "gelo_zona_persistente"
+
+[node name="gelo_nevasca" parent="TreeContainer/Gelo" unique_id=-1294967272 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -281.0
+offset_top = -194.0
+offset_right = -201.0
+offset_bottom = -114.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_wa0ai")
+skill_id = "gelo_nevasca"
+
+[node name="gelo_foco_1" parent="TreeContainer/Gelo" unique_id=-1294967271 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -182.0
+offset_top = -169.0
+offset_right = -102.0
+offset_bottom = -89.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_pk0co")
+skill_id = "gelo_foco_1"
+
+[node name="gelo_alvo_duplo" parent="TreeContainer/Gelo" unique_id=-1294967270 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -200.0
+offset_right = -130.0
+offset_bottom = -120.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_pk0co")
+skill_id = "gelo_alvo_duplo"
+
+[node name="gelo_congelamento" parent="TreeContainer/Gelo" unique_id=-1294967269 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -240.99998
+offset_top = -242.0
+offset_right = -160.99998
+offset_bottom = -162.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_ulbj6")
+skill_id = "gelo_congelamento"
+
 [node name="Fogo" type="Control" parent="TreeContainer" unique_id=1481046112]
 anchors_preset = 0
 offset_right = 40.0
@@ -970,6 +1276,159 @@ grow_horizontal = 2
 grow_vertical = 2
 texture_normal = SubResource("AtlasTexture_dvtuv")
 skill_id = "fogo_base"
+
+[node name="fogo_dano_1" parent="TreeContainer/Fogo" unique_id=-1294967286 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -40.0
+offset_right = -150.0
+offset_bottom = 40.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_lnxdn")
+skill_id = "fogo_dano_1"
+
+[node name="fogo_queima_prolongada" parent="TreeContainer/Fogo" unique_id=-1294967285 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -270.0
+offset_top = -42.0
+offset_right = -190.0
+offset_bottom = 38.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_lnxdn")
+skill_id = "fogo_queima_prolongada"
+
+[node name="fogo_conflagracao" parent="TreeContainer/Fogo" unique_id=-1294967284 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -317.0
+offset_top = -58.0
+offset_right = -237.0
+offset_bottom = 22.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_hkher")
+skill_id = "fogo_conflagracao"
+
+[node name="fogo_range_1" parent="TreeContainer/Fogo" unique_id=-1294967283 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -231.0
+offset_top = -8.0
+offset_right = -151.0
+offset_bottom = 72.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_81yc1")
+skill_id = "fogo_range_1"
+
+[node name="fogo_propagacao" parent="TreeContainer/Fogo" unique_id=-1294967282 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -270.0
+offset_top = -4.0
+offset_right = -190.0
+offset_bottom = 76.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_81yc1")
+skill_id = "fogo_propagacao"
+
+[node name="fogo_inferno" parent="TreeContainer/Fogo" unique_id=-1294967281 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -315.00003
+offset_top = 1.9999981
+offset_right = -235.00003
+offset_bottom = 78.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_wa0ai")
+skill_id = "fogo_inferno"
+
+[node name="fogo_vulnerabilidade_1" parent="TreeContainer/Fogo" unique_id=-1294967280 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -214.0
+offset_top = 21.0
+offset_right = -134.0
+offset_bottom = 101.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_pk0co")
+skill_id = "fogo_vulnerabilidade_1"
+
+[node name="fogo_pavor" parent="TreeContainer/Fogo" unique_id=-1294967279 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -251.0
+offset_top = 34.0
+offset_right = -171.0
+offset_bottom = 114.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.3, 0.3)
+texture_normal = SubResource("AtlasTexture_pk0co")
+skill_id = "fogo_pavor"
+
+[node name="fogo_combustao" parent="TreeContainer/Fogo" unique_id=-1294967278 instance=ExtResource("2_sn")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -298.0
+offset_top = 50.00003
+offset_right = -218.0
+offset_bottom = 130.00003
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.4, 0.4)
+texture_normal = SubResource("AtlasTexture_ulbj6")
+skill_id = "fogo_combustao"
 
 [node name="Sapo" type="Control" parent="TreeContainer" unique_id=1235238853]
 anchors_preset = 0

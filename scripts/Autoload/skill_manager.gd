@@ -32,6 +32,18 @@ var skill_tree_data: Dictionary = {
 	"esqueleto_perfurante": { "tower": "Esqueleto (Básico)", "stat": "special", "value": 0.0, "desc": "Os projéteis perfuram e atingem até 3 inimigos antes de serem destruídos.", "requires": ["esqueleto_mirada_alta"], "exclusive_group": "esqueleto_tier3" },
 
 	"fogo_base": { "tower": "Golem de Fogo (Chamas)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
+
+	"fogo_dano_1": { "tower": "Golem de Fogo (Chamas)", "stat": "damage", "value": 1.0, "requires": ["fogo_base"] },
+	"fogo_queima_prolongada": { "tower": "Golem de Fogo (Chamas)", "stat": "special", "value": 0.0, "desc": "Aumenta a duração da queimadura de 3 para 5 segundos.", "requires": ["fogo_dano_1"] },
+	"fogo_conflagracao": { "tower": "Golem de Fogo (Chamas)", "stat": "special", "value": 0.0, "desc": "A queimadura passa a acumular em até 3 pilhas simultâneas no mesmo inimigo, multiplicando o dano por tique.", "requires": ["fogo_queima_prolongada"], "exclusive_group": "fogo_tier3" },
+
+	"fogo_range_1": { "tower": "Golem de Fogo (Chamas)", "stat": "range_pct", "value": 0.20, "requires": ["fogo_base"] },
+	"fogo_propagacao": { "tower": "Golem de Fogo (Chamas)", "stat": "special", "value": 0.0, "desc": "Ao acender, a armadilha também queima inimigos num raio de 30 ao redor do alvo.", "requires": ["fogo_range_1"] },
+	"fogo_inferno": { "tower": "Golem de Fogo (Chamas)", "stat": "special", "value": 0.0, "desc": "O raio de propagação aumenta para 50, e inimigos queimando incendeiam outros inimigos próximos que ainda não estão pegando fogo, a cada segundo.", "requires": ["fogo_propagacao"], "exclusive_group": "fogo_tier3" },
+
+	"fogo_vulnerabilidade_1": { "tower": "Golem de Fogo (Chamas)", "stat": "special", "value": 0.0, "desc": "Inimigos queimando recebem 10% mais dano físico.", "requires": ["fogo_base"] },
+	"fogo_pavor": { "tower": "Golem de Fogo (Chamas)", "stat": "special", "value": 0.0, "desc": "Inimigos queimando têm 5% de chance por segundo de entrar em pânico.", "requires": ["fogo_vulnerabilidade_1"] },
+	"fogo_combustao": { "tower": "Golem de Fogo (Chamas)", "stat": "special", "value": 0.0, "desc": "Ao morrer queimando, o inimigo explode, causando dano em área aos inimigos próximos.", "requires": ["fogo_pavor"], "exclusive_group": "fogo_tier3" },
 	"sapo_base": { "tower": "Sapo (Sniper)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
 
 	"olho_base": { "tower": "Olho Flutuante (Laser)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
@@ -49,6 +61,18 @@ var skill_tree_data: Dictionary = {
 
 	"pedra_base": { "tower": "Golem de Pedra (Canhão)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
 
+	"pedra_dano_1": { "tower": "Golem de Pedra (Canhão)", "stat": "damage", "value": 8.0, "requires": ["pedra_base"] },
+	"pedra_anti_boss": { "tower": "Golem de Pedra (Canhão)", "stat": "special", "value": 0.0, "desc": "Causa 50% mais dano contra minibosses e bosses.", "requires": ["pedra_dano_1"] },
+	"pedra_demolidor": { "tower": "Golem de Pedra (Canhão)", "stat": "special", "value": 0.0, "desc": "A cada 4 tiros, o próximo causa o triplo de dano.", "requires": ["pedra_anti_boss"], "exclusive_group": "pedra_tier3" },
+
+	"pedra_range_1": { "tower": "Golem de Pedra (Canhão)", "stat": "range_pct", "value": 0.20, "requires": ["pedra_base"] },
+	"pedra_estilhaco": { "tower": "Golem de Pedra (Canhão)", "stat": "special", "value": 0.0, "desc": "O projétil explode ao acertar, causando 50% do dano em área a inimigos num raio de 50 ao redor do alvo.", "requires": ["pedra_range_1"] },
+	"pedra_bombardeio": { "tower": "Golem de Pedra (Canhão)", "stat": "special", "value": 0.0, "desc": "A explosão fica maior (raio 90) e mais forte (80% do dano), e passa a aplicar a lentidão do Golem também em todos os atingidos.", "requires": ["pedra_estilhaco"], "exclusive_group": "pedra_tier3" },
+
+	"pedra_impacto_1": { "tower": "Golem de Pedra (Canhão)", "stat": "effect_value", "value": -0.1, "desc": "Fortalece a lentidão do impacto (o alvo fica ainda mais lento).", "requires": ["pedra_base"] },
+	"pedra_onda_de_choque": { "tower": "Golem de Pedra (Canhão)", "stat": "special", "value": 0.0, "desc": "O impacto espalha a lentidão para inimigos num raio de 40 ao redor do alvo atingido.", "requires": ["pedra_impacto_1"] },
+	"pedra_atordoamento": { "tower": "Golem de Pedra (Canhão)", "stat": "special", "value": 0.0, "desc": "15% de chance de atordoar o inimigo por 1 segundo ao acertar, imobilizando-o completamente.", "requires": ["pedra_onda_de_choque"], "exclusive_group": "pedra_tier3" },
+
 	"espantalho_base": { "tower": "Espantalho (Buff)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
 	"espantalho_dano_1": { "tower": "Espantalho (Buff)", "stat": "special", "value": 0.0, "desc": "Aumenta em 15% o dano das torres dentro do alcance do Espantalho.", "requires": ["espantalho_base"] },
 	"espantalho_spd_1": { "tower": "Espantalho (Buff)", "stat": "special", "value": 0.0, "desc": "Aumenta em 15% a velocidade de ataque e concede 10% de chance de crítico (dano dobrado) às torres no alcance.", "requires": ["espantalho_dano_1"] },
@@ -63,6 +87,18 @@ var skill_tree_data: Dictionary = {
 	"espantalho_sinergia": { "tower": "Espantalho (Buff)", "stat": "special", "value": 0.0, "desc": "Quando há 2 ou mais Espantalhos com esta skill no mesmo alcance, concede +2% adicional a todos os bônus (dano, velocidade de ataque, alcance e velocidade de projétil).", "requires": ["espantalho_range_buff"], "exclusive_group": "espantalho_tier3" },
 
 	"gelo_base": { "tower": "Golem de Gelo (Lentidão)", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
+
+	"gelo_lentidao_1": { "tower": "Golem de Gelo (Lentidão)", "stat": "effect_value", "value": -0.1, "desc": "Fortalece a lentidão do impacto (o alvo fica ainda mais lento).", "requires": ["gelo_base"] },
+	"gelo_duracao": { "tower": "Golem de Gelo (Lentidão)", "stat": "special", "value": 0.0, "desc": "Aumenta a duração da lentidão de 2.5 para 4 segundos.", "requires": ["gelo_lentidao_1"] },
+	"gelo_fragil": { "tower": "Golem de Gelo (Lentidão)", "stat": "special", "value": 0.0, "desc": "Inimigos sob a lentidão do Gelo recebem 30% mais dano de todas as fontes.", "requires": ["gelo_duracao"], "exclusive_group": "gelo_tier3" },
+
+	"gelo_range_1": { "tower": "Golem de Gelo (Lentidão)", "stat": "range_pct", "value": 0.20, "requires": ["gelo_base"] },
+	"gelo_zona_persistente": { "tower": "Golem de Gelo (Lentidão)", "stat": "special", "value": 0.0, "desc": "A explosão deixa uma zona de gelo no chão por 3 segundos, que continua desacelerando quem passar por ela.", "requires": ["gelo_range_1"] },
+	"gelo_nevasca": { "tower": "Golem de Gelo (Lentidão)", "stat": "special", "value": 0.0, "desc": "A zona de gelo fica maior (raio 120) e dura 6 segundos.", "requires": ["gelo_zona_persistente"], "exclusive_group": "gelo_tier3" },
+
+	"gelo_foco_1": { "tower": "Golem de Gelo (Lentidão)", "stat": "fire_rate", "value": 0.1, "requires": ["gelo_base"] },
+	"gelo_alvo_duplo": { "tower": "Golem de Gelo (Lentidão)", "stat": "special", "value": 0.0, "desc": "Dispara um segundo projétil simultâneo contra outro inimigo próximo.", "requires": ["gelo_foco_1"] },
+	"gelo_congelamento": { "tower": "Golem de Gelo (Lentidão)", "stat": "special", "value": 0.0, "desc": "12% de chance de congelar completamente o alvo por 1.5 segundos ao acertar.", "requires": ["gelo_alvo_duplo"], "exclusive_group": "gelo_tier3" },
 	"planta_base": { "tower": "Planta Peçonhenta", "stat": "unlock", "value": 1.0, "requires": ["base_start"] },
 
 	"planta_dano_1": { "tower": "Planta Peçonhenta", "stat": "special", "value": 0.0, "desc": "Aumenta em 15% o dano de cada tique de veneno.", "requires": ["planta_base"] },
